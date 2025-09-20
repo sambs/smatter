@@ -1,9 +1,7 @@
 import { Endpoint, ServerNode, VendorId } from "@matter/main";
 import { BridgedDeviceBasicInformationServer } from "@matter/main/behaviors/bridged-device-basic-information";
+import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
-import { MeasurementType } from "@matter/main/types";
-import * as behaviours from "@matter/main/behaviors";
-import * as devices from "@matter/main/devices";
 
 const vendorName = "sambs";
 const vendorId = 0xfff1;
@@ -66,16 +64,13 @@ const aggregator = new Endpoint(AggregatorEndpoint, { id: "aggregator" });
 
 await server.add(aggregator);
 
-async function addDeviceEndpoint(
+async function addDummySwitch(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
   const endpoint = new Endpoint(
-    devices.GenericSwitchDevice.with(
-      BridgedDeviceBasicInformationServer,
-      behaviours.SwitchServer,
-    ),
+    OnOffPlugInUnitDevice.with(BridgedDeviceBasicInformationServer),
     {
       id,
       bridgedDeviceBasicInformation: {
@@ -105,18 +100,14 @@ async function addDeviceEndpoint(
     console.log(`Stop identify logic for ${name} ...`);
   });
 
-  endpoint.events.switch.stateChanged.on((value) => {
-    console.log(`${name} is now ${value}`);
+  endpoint.events.onOff.onOff$Changed.on((value) => {
+    console.log(`${name} is now ${value ? "ON" : "OFF"}`);
   });
-
-  // endpoint.events.onOff.onOff$Changed.on((value) => {
-  //   console.log(`${name} is now ${value ? "ON" : "OFF"}`);
-  // });
 
   return endpoint;
 }
 
-const bedtimeSwitch = await addDeviceEndpoint(
+const bedtimeSwitch = await addDummySwitch(
   aggregator,
   "bedtime-switch",
   "Bedtime Switch",
