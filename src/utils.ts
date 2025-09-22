@@ -7,28 +7,25 @@ import { BridgedDeviceBasicInformationClient } from "@matter/main/behaviors/brid
 export function inspectEndpoint(endpoint: Endpoint) {
   console.log("Inspecting endpoint", endpoint.id);
   try {
-    console.log(`Descriptor`, endpoint.stateOf(DescriptorClient));
+    console.log("Descriptor", endpoint.stateOf(DescriptorClient));
   } catch (error) {
     console.error(error?.message ?? error);
   }
   try {
     console.log(
-      `Basic Information`,
+      "Bridged Device Basic Information",
       endpoint.stateOf(BridgedDeviceBasicInformationClient),
     );
   } catch (error) {
     console.error(error?.message ?? error);
   }
   try {
-    console.log(
-      `Bridged Devjice Basic Information`,
-      endpoint.stateOf(BasicInformationClient),
-    );
+    console.log("Basic Information", endpoint.stateOf(BasicInformationClient));
   } catch (error) {
     console.error(error?.message ?? error);
   }
   try {
-    console.log(`User Label`, endpoint.stateOf(UserLabelClient));
+    console.log("User Label", endpoint.stateOf(UserLabelClient));
   } catch (error) {
     console.error(error?.message ?? error);
   }
