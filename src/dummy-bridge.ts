@@ -1,7 +1,9 @@
 import { Endpoint, ServerNode, VendorId } from "@matter/main";
 import { BridgedDeviceBasicInformationServer } from "@matter/main/behaviors/bridged-device-basic-information";
+import { OnOffServer } from "@matter/main/behaviors/on-off";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices/on-off-plug-in-unit";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
+import { inspectEndpoint } from "./utils.ts";
 
 const vendorName = "sambs";
 const vendorId = 0xfff1;
@@ -119,6 +121,13 @@ const bedtimeSwitch = await addDummySwitch(
  * The QR Code is printed automatically.
  */
 await server.start();
+
+inspectEndpoint(server);
+
+// console.log(Diagnostic.json(server.state));
+// console.log(JSON.stringify(bedtimeSwitch.state, null, 2));
+
+// console.log(bedtimeSwitch.stateOf(OnOffServer));
 
 // Temporarily remove device endpoint from bridge
 // await bedtimeSwitch.close();
