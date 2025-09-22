@@ -9,7 +9,9 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@matter/main": "^0.15.3"
+    "@matter/main": "0.16.0-alpha.0-20250921-b7a3dda23",
+    "@matter/nodejs": "0.16.0-alpha.0-20250921-b7a3dda23",
+    "@project-chip/matter.js": "0.16.0-alpha.0-20250921-b7a3dda23"
   },
   "devDependencies": {
     "@types/node": "^24.5.2",
