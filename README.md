@@ -1,0 +1,4 @@
+## Env Vars
+
+export MATTER_LOG_LEVEL=1
+export MATTER_MDNS_NETWORKINTERFACE=en0
