@@ -1,7 +1,11 @@
 import { Endpoint } from "@project-chip/matter.js/device";
 import { Descriptor } from "@matter/main/clusters/descriptor";
 import { BasicInformation } from "@matter/main/clusters/basic-information";
-import { BridgedDeviceBasicInformation, OnOff } from "@matter/main/clusters";
+import {
+  BridgedDeviceBasicInformation,
+  OccupancySensing,
+  OnOff,
+} from "@matter/main/clusters";
 
 export async function inspectEndpoint(endpoint: Endpoint, level = 0) {
   console.log(
@@ -30,7 +34,12 @@ export async function inspectEndpoint(endpoint: Endpoint, level = 0) {
   );
 
   console.log(
-    "OnOff",
+    "OccupancySensing",
+    !!endpoint.getClusterClient(OccupancySensing.Complete),
+  );
+
+  console.log(
+    "OnOff.onOff",
     await endpoint.getClusterClient(OnOff.Complete)?.getOnOffAttribute(),
   );
 

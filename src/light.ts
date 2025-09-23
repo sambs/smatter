@@ -1,6 +1,7 @@
 import { Diagnostic, type Logger } from "@matter/main";
 import type { Endpoint } from "@project-chip/matter.js/device";
 import { ColorControl, OnOff } from "@matter/main/clusters";
+import { temperature } from "@matter/main/model";
 
 export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
   if (!endpoint) {
@@ -23,26 +24,36 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
     );
 
   return {
-    toggle: async () => {
-      await onOff?.toggle();
+    onOff: {
+      get value() {
+        return onOff?.attributes.onOff.getLocal();
+      },
+      toggle: async () => {
+        await onOff?.toggle();
+      },
+      on: async () => {
+        await onOff?.on();
+      },
+      off: async () => {
+        await onOff?.off();
+      },
     },
-    on: async () => {
-      await onOff?.on();
-    },
-    off: async () => {
-      await onOff?.off();
-    },
-    setTemperature: async (
-      temperature: number,
-      transitionTime = 10, // in tenths of a second
-      executeIfOff = true,
-    ) => {
-      await color?.moveToColorTemperature({
-        colorTemperatureMireds: temperature,
-        transitionTime,
-        optionsMask: { executeIfOff: true }, // Specify that we want executeIfOff to be respected
-        optionsOverride: { executeIfOff },
-      });
+    temperature: {
+      get value() {
+        return color?.attributes.colorTemperatureMireds.getLocal();
+      },
+      set: async (
+        temperature: number,
+        transitionTime = 10, // in tenths of a second
+        executeIfOff = true,
+      ) => {
+        await color?.moveToColorTemperature({
+          colorTemperatureMireds: temperature,
+          transitionTime,
+          optionsMask: { executeIfOff: true }, // Specify that we want executeIfOff to be respected
+          optionsOverride: { executeIfOff },
+        });
+      },
     },
   };
 }

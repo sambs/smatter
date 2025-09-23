@@ -1,4 +1,4 @@
-import { Environment, Logger } from "@matter/main";
+import { Diagnostic, Environment, Logger } from "@matter/main";
 import { CommissioningController } from "@project-chip/matter.js";
 import { Endpoint, NodeStates } from "@project-chip/matter.js/device";
 import { ManualPairingCodeCodec } from "@matter/main/types";
@@ -7,6 +7,7 @@ import {
   GeneralCommissioning,
 } from "@matter/main/clusters";
 import { getLight } from "./light.ts";
+import { getMotionSensor } from "./motion-sensor.ts";
 
 const environment = Environment.default;
 const logger = Logger.get("Controller");
@@ -23,7 +24,8 @@ function createCommissioningController() {
     adminFabricLabel: id,
   });
 }
-export async function createController() {
+
+export async function createHueController(logAll = false) {
   const controller = createCommissioningController();
 
   await controller.start();
@@ -52,41 +54,41 @@ export async function createController() {
     );
   }
 
-  // Subscribe to all bridge attribute changes
-  // node.events.attributeChanged.on(
-  //   ({ path: { nodeId, clusterId, endpointId, attributeName }, value }) =>
-  //     console.log(
-  //       `attributeChangedCallback ${nodeId}: Attribute ${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
-  //         value,
-  //       )}`,
-  //     ),
-  // );
+  if (logAll) {
+    // Subscribe to all bridge attribute changes
+    node.events.attributeChanged.on(
+      ({ path: { clusterId, endpointId, attributeName }, value }) =>
+        logger.info(
+          `Attribute ${endpointId}/${clusterId}/${attributeName} changed to ${Diagnostic.json(
+            value,
+          )}`,
+        ),
+    );
 
-  // Subscribe to all bridge events (eg button presses)
-  // node.events.eventTriggered.on(
-  //   ({ path: { nodeId, clusterId, endpointId, eventName }, events }) =>
-  //     console.log(
-  //       `eventTriggeredCallback ${nodeId}: Event ${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
-  //         events,
-  //       )}`,
-  //     ),
-  // );
+    // Subscribe to all bridge events (eg button presses)
+    node.events.eventTriggered.on(
+      ({ path: { clusterId, endpointId, eventName }, events }) =>
+        logger.info(
+          `Event ${endpointId}/${clusterId}/${eventName} triggered with ${Diagnostic.json(
+            events,
+          )}`,
+        ),
+    );
+  }
 
   node.events.stateChanged.on((info) => {
     switch (info) {
       case NodeStates.Connected:
-        logger.info(`Connected`, info);
+        logger.info(`Controller is connected`);
         break;
       case NodeStates.Disconnected:
-        logger.info(`Disconnected`, info);
-        console.log(`state changed: Node ${node.nodeId} disconnected`);
+        logger.info(`Controller is disconnected`);
         break;
       case NodeStates.Reconnecting:
-        logger.info(`Reconnecting`, info);
-        console.log(`state changed: Node ${node.nodeId} reconnecting`);
+        logger.info(`Controller is reconnecting`);
         break;
       case NodeStates.WaitingForDeviceDiscovery:
-        logger.info(`WaitingForDeviceDiscovery, info`);
+        logger.info(`Controller is waitingForDeviceDiscovery`);
         break;
     }
   });
@@ -107,8 +109,10 @@ export async function createController() {
     }
   }
 
+  const endpointNames = Object.keys(namedEndpoints);
+
   logger.info(
-    `Found ${namedEndpoints.length} named devices: ${Object.keys(namedEndpoints).join(", ")}`,
+    `Found ${endpointNames.length} named endpoints: ${endpointNames.join(", ")}`,
   );
 
   return {
@@ -116,6 +120,9 @@ export async function createController() {
     aggregator,
     getLight: (name: string) => {
       return getLight(logger, name, namedEndpoints[name]);
+    },
+    getMotionSensor: (name: string) => {
+      return getMotionSensor(logger, name, namedEndpoints[name]);
     },
   };
 }

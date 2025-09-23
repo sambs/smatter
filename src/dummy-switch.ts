@@ -17,11 +17,11 @@ export async function createDummySwitch(
 
   return {
     endpoint,
-    state: () => {
+    get value() {
       return getOnOffState().onOff;
     },
-    events: {
-      change: endpoint.events.onOff.onOff$Changed,
+    onChange(handler: (value: boolean) => void) {
+      endpoint.events.onOff.onOff$Changed.on(handler);
     },
   };
 }
