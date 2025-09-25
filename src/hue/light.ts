@@ -1,7 +1,7 @@
 import { Diagnostic, type Logger } from "@matter/main";
 import type { Endpoint } from "@project-chip/matter.js/device";
 import { ColorControl, LevelControl, OnOff } from "@matter/main/clusters";
-import { clamp } from "./utils.ts";
+import { clamp } from "../utils.ts";
 
 const INTESITY_COLOR_TEMPERATURE_OFFSET = 500;
 

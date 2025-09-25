@@ -6,12 +6,12 @@ import {
   LevelControlServer,
 } from "@matter/main/behaviors";
 
-export async function createDummyLight(
+export async function createLightControl(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
-  const endpoint = await createDummyLightEndpoint(aggregator, id, name);
+  const endpoint = await createLightControlEndpoint(aggregator, id, name);
 
   const getLevelControlState = () => {
     return endpoint.stateOf(LevelControlServer);
@@ -33,17 +33,17 @@ export async function createDummyLight(
   };
 }
 
-export async function deleteDummyLight(
+export async function deleteLightControl(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
-  const endpoint = await createDummyLightEndpoint(aggregator, id, name);
+  const endpoint = await createLightControlEndpoint(aggregator, id, name);
 
   await endpoint.delete();
 }
 
-export async function createDummyLightEndpoint(
+export async function createLightControlEndpoint(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,

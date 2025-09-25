@@ -1,14 +1,11 @@
 import { Logger } from "@matter/main";
-import { createDummyBridge } from "./dummy-bridge.ts";
-import { createDummySwitch, deleteDummySwitch } from "./dummy-switch.ts";
-import { createHueController } from "./hue-controller.ts";
-import { createDummyLight } from "./dummy-light.ts";
-import { clamp } from "./utils.ts";
+import { createControlBridge } from "./control/bridge.ts";
+import { createHueController } from "./hue/controller.ts";
 
 const logger = Logger.get("Smatter");
 
-const { server, aggregator } = await createDummyBridge();
-const { getLight, getMotionSensor } = await createHueController();
+const controls = await createControlBridge();
+const hue = await createHueController();
 
 const Temperature = {
   COOL: 300,
@@ -17,30 +14,29 @@ const Temperature = {
   SEEDY: 450,
 } as const;
 
-const bedsideLight = getLight("Bedside Light");
-const goldStandard = getLight("Gold Standard");
-const landingMotionSensor = getMotionSensor("Landing Motion Sensor");
+/**
+ * Real Hue devices
+ */
+const bedsideLight = hue.getLight("Bedside Light");
+const goldStandard = hue.getLight("Gold Standard");
+const landingMotionSensor = hue.getMotionSensor("Landing Motion Sensor");
 
-const isBedtime = await createDummySwitch(
-  aggregator,
-  "bedtime-switch",
-  "Bedtime",
+/**
+ * Fake devices used as control inputs
+ */
+const isBedtime = await controls.createSwitch("bedtime-switch", "Bedtime");
+const lightTemperatureOffset = await controls.createLight(
+  "light-temp-offset",
+  "Light Temperature",
 );
 
 isBedtime.onChange((value) => {
   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
 });
 
-const lightTemperatureOffset = await createDummyLight(
-  aggregator,
-  "light-temperature-offset",
-  "Light Temperature",
-);
-
 lightTemperatureOffset.onChange((level) => {
   logger.info("Light tempererature offset", level - 128);
-  goldStandard.level.set(clamp(level * 1.2, 0, 254));
-  goldStandard.temperature.set(500 - level);
+  goldStandard.intensity.set(level);
 });
 
 landingMotionSensor.occupancy.onChange((value) => {
@@ -55,4 +51,4 @@ landingMotionSensor.occupancy.onChange((value) => {
   }
 });
 
-await server.start();
+await controls.server.start();

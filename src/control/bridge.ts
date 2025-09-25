@@ -1,19 +1,20 @@
 import { Endpoint, ServerNode, VendorId } from "@matter/main";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
+import { createLightControl } from "./light.ts";
+import { createSwitchControl } from "./switch.ts";
 
-const vendorName = "sambs";
-const vendorId = 0xfff1;
+const BRIDGE_ID = "control-bridge";
+const BRIDGE_NAME = "Control Bridge";
+const VENDOR_NAME = "sambs";
+const VENDOR_ID = 0xfff1;
 
-const bridgeId = "dummy-bridge";
-const bridgeName = "Dummy Bridge";
-
-export async function createDummyBridge() {
+export async function createControlBridge() {
   /**
    * Create a Matter ServerNode, which contains the Root Endpoint and all relevant data and configuration
    */
   const server = await ServerNode.create({
     // Required: Give the Node a unique ID which is used to store the state of this node
-    id: bridgeId,
+    id: BRIDGE_ID,
 
     // Provide Network relevant configuration like the port
     // Optional when operating only one device on a host, Default port is 5540
@@ -31,21 +32,21 @@ export async function createDummyBridge() {
     // Provide Node announcement settings
     // Optional: If Ommitted some development defaults are used
     productDescription: {
-      name: bridgeName,
+      name: BRIDGE_NAME,
       deviceType: AggregatorEndpoint.deviceType,
     },
 
     // Provide defaults for the BasicInformation cluster on the Root endpoint
     // Optional: If Omitted some development defaults are used
     basicInformation: {
-      vendorName,
-      vendorId: VendorId(vendorId),
-      nodeLabel: `${bridgeName} Node Label`,
-      productName: `${bridgeName} Product`,
-      productLabel: `${bridgeName} Product Label`,
+      vendorName: VENDOR_NAME,
+      vendorId: VendorId(VENDOR_ID),
+      nodeLabel: `${BRIDGE_NAME} Node Label`,
+      productName: `${BRIDGE_NAME} Product`,
+      productLabel: `${BRIDGE_NAME} Product Label`,
       productId: 0x8000,
-      serialNumber: `${bridgeId}-serial`,
-      uniqueId: bridgeId,
+      serialNumber: `${BRIDGE_ID}-serial`,
+      uniqueId: BRIDGE_ID,
     },
   });
 
@@ -53,5 +54,13 @@ export async function createDummyBridge() {
 
   await server.add(aggregator);
 
-  return { server, aggregator };
+  return {
+    server,
+    createLight(id: string, name: string) {
+      return createLightControl(aggregator, id, name);
+    },
+    createSwitch(id: string, name: string) {
+      return createSwitchControl(aggregator, id, name);
+    },
+  };
 }

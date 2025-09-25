@@ -6,12 +6,12 @@ import {
   OnOffServer,
 } from "@matter/main/behaviors";
 
-export async function createDummySwitch(
+export async function createSwitchControl(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
-  const endpoint = await createDummySwitchEndpoint(aggregator, id, name);
+  const endpoint = await createSwitchControlEndpoint(aggregator, id, name);
 
   const getOnOffState = () => {
     return endpoint.stateOf(OnOffServer);
@@ -28,17 +28,17 @@ export async function createDummySwitch(
   };
 }
 
-export async function deleteDummySwitch(
+export async function deleteSwitchControl(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
-  const endpoint = await createDummySwitchEndpoint(aggregator, id, name);
+  const endpoint = await createSwitchControlEndpoint(aggregator, id, name);
 
   await endpoint.delete();
 }
 
-export async function createDummySwitchEndpoint(
+export async function createSwitchControlEndpoint(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,

@@ -12,16 +12,16 @@ import { getMotionSensor } from "./motion-sensor.ts";
 const environment = Environment.default;
 const logger = Logger.get("Controller");
 
-const id = "smatter-controller";
+const ID = "hue-controller";
 
 function createCommissioningController() {
   return new CommissioningController({
     environment: {
       environment,
-      id,
+      id: ID,
     },
     autoConnect: true, // Auto connect to the commissioned nodes
-    adminFabricLabel: id,
+    adminFabricLabel: ID,
   });
 }
 
