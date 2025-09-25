@@ -9,14 +9,11 @@ importers:
   .:
     dependencies:
       '@matter/main':
-        specifier: 0.16.0-alpha.0-20250921-b7a3dda23
-        version: 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/nodejs':
-        specifier: 0.16.0-alpha.0-20250921-b7a3dda23
-        version: 0.16.0-alpha.0-20250921-b7a3dda23
+        specifier: 0.16.0-alpha.0-20250925-9e6a5c124
+        version: 0.16.0-alpha.0-20250925-9e6a5c124
       '@project-chip/matter.js':
-        specifier: 0.16.0-alpha.0-20250921-b7a3dda23
-        version: 0.16.0-alpha.0-20250921-b7a3dda23
+        specifier: 0.16.0-alpha.0-20250925-9e6a5c124
+        version: 0.16.0-alpha.0-20250925-9e6a5c124
     devDependencies:
       '@types/node':
         specifier: ^24.5.2
@@ -30,27 +27,27 @@ importers:
 
 packages:
 
-  '@matter/general@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-4HaYSXg/WK6sAao1o+IoHndy9CfQdg623nz6OC6kAJD/H9HS3LSaggpfHK214gwQsicRS4lKjkKiiJMULec7Xg==}
+  '@matter/general@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-dVRkbExdFG3Nx0oA/LXFZ/DGPEnl/FjthO03qYhu67KIjbmKBufcPJBRX7NQvrj4FyWjjSDYBQhLdAvuXvs2DQ==}
 
-  '@matter/main@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-doEv44R29MgHDyOqoRe7YKvfNcDOCdpVz5LAGmj21J0pQuluOuNmM7b+h/Ib2MfJ1SplK48V/IgQZvCSLb+txw==}
+  '@matter/main@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-Hq/ydwPSudw+E+e9nXgwAOPjxQ13iQTiLhcVNUv6jYfYJC1JgfBSncZ7t6JtemiqQZkXCNn4jLCjtOkXffdGfQ==}
 
-  '@matter/model@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-cW5HSBo2iGMNv2Q0qMKY8MJc11w7hY67F5sO7lNNS77wHHYXQ5ixLKmGLAHBQonGZovuKdMZmghvxSleTW0jDg==}
+  '@matter/model@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-STF1WqUFzb7W9hsPUZdathyhMMs5iotRILvBDcQkb0jyFVwrkMV0GmZpgMMcpOUsSCIGzmBtvD8/ZeQh3n8kZw==}
 
-  '@matter/node@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-1Aboja2ZDSyqhjUMNdvXvF9Kb6vHN4u2yAqo0XNnK64cPbf9jDSdzKhU56PIv6ItHlluqTAX8NKExY6hPA9zXA==}
+  '@matter/node@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-UzEHa6ua4QbYK7YBIj1lWEXthN2WA3zgo6fDNRj3ip82yTYNqPz37H6a4GFVuaj5wpmlPEAHheF5qLWOdMGogw==}
 
-  '@matter/nodejs@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-IjqaHgt/JaggNdg24yCt97ioZZDrTF7+LQ6BHpof9AEX6pqZUwiGt/gUYgbv1yqq5VihryuYYTfor7T1seANvQ==}
+  '@matter/nodejs@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-ofrlph3xUrIUS+oWgZymoUg0XVeOiMEfEi3fMnbWwJ+X11XO/BjxHwz1UdObdf5Uh/NZSfCW9MWk89XsEqkhKA==}
     engines: {node: '>=20.19.0 <22.0.0 || >=22.13.0'}
 
-  '@matter/protocol@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-Mykz9PCZRWdkqG3NsTy6Fi5isL4wiXUajGWq8JjpQbfSRwQvqRprsLzZ7IwT/79XcJOGqkNeSLB3OVCg5tBiEA==}
+  '@matter/protocol@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-EfjuHYg7+k+P/gVhDOxh7PzMn9TtV1x1DG0IzZlMngLU5gv+AD/41NoQFv91lOTrFRSFg4EdfIlY9slz+r9vOA==}
 
-  '@matter/types@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-/zwFyhO33vXzsfEcA9yjZTPFGCVEwU3vZyunY7L3SbVWocrlAirvyZWfSQo0s+UK/XYnGktNsRKZ/vZfS0MtGw==}
+  '@matter/types@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-AGe2EFL83zosfK2dhXKLtlrWcc2uga5Xg919c5DQW/IOXQeXWyAmio5yqg00T69+14HYdexGZMgsrFovBoEcsg==}
 
   '@noble/curves@2.0.1':
     resolution: {integrity: sha512-vs1Az2OOTBiP4q0pwjW5aF0xp9n4MxVrmkFBxc6EKZc6ddYx5gaZiAsZoq0uRRXWbi3AT/sBqn05eRPtn1JCPw==}
@@ -60,8 +57,8 @@ packages:
     resolution: {integrity: sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw==}
     engines: {node: '>= 20.19.0'}
 
-  '@project-chip/matter.js@0.16.0-alpha.0-20250921-b7a3dda23':
-    resolution: {integrity: sha512-NLiSfbtTjaAHdn0ERIqBmnShbdMcfjZVnodW1uQQAogrpsQ4i4ZURpsf3iZ8RcofXiX0L/6J+MnJmP+LMOS4/A==}
+  '@project-chip/matter.js@0.16.0-alpha.0-20250925-9e6a5c124':
+    resolution: {integrity: sha512-/TmgPXjEfbShYCT8hBbSYPsH2r4BDDLRs43Wr/7Rd69sszk2OJUpteQho3LAGkapXwvCdLyQTrFwT26BVqCVZA==}
 
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
@@ -81,48 +78,49 @@ packages:
 
 snapshots:
 
-  '@matter/general@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@matter/general@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
       '@noble/curves': 2.0.1
 
-  '@matter/main@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@matter/main@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/model': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/node': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/protocol': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/types': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/node': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
     optionalDependencies:
-      '@matter/nodejs': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/nodejs': 0.16.0-alpha.0-20250925-9e6a5c124
 
-  '@matter/model@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@matter/model@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
 
-  '@matter/node@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@matter/node@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/model': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/protocol': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/types': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
 
-  '@matter/nodejs@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@matter/nodejs@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/node': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/protocol': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/types': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/node': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
+    optional: true
 
-  '@matter/protocol@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@matter/protocol@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/model': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/types': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
 
-  '@matter/types@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@matter/types@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/model': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
 
   '@noble/curves@2.0.1':
     dependencies:
@@ -130,13 +128,13 @@ snapshots:
 
   '@noble/hashes@2.0.1': {}
 
-  '@project-chip/matter.js@0.16.0-alpha.0-20250921-b7a3dda23':
+  '@project-chip/matter.js@0.16.0-alpha.0-20250925-9e6a5c124':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/model': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/node': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/protocol': 0.16.0-alpha.0-20250921-b7a3dda23
-      '@matter/types': 0.16.0-alpha.0-20250921-b7a3dda23
+      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/node': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
 
   '@types/node@24.5.2':
     dependencies:
