@@ -1,50 +1,55 @@
 import { Endpoint } from "@matter/main";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
-import { OnOffPlugInUnitDevice } from "@matter/main/devices";
+import { DimmableLightDevice } from "@matter/main/devices";
 import {
   BridgedDeviceBasicInformationServer,
-  OnOffServer,
+  LevelControlServer,
 } from "@matter/main/behaviors";
 
-export async function createDummySwitch(
+export async function createDummyLight(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
-  const endpoint = await createDummySwitchEndpoint(aggregator, id, name);
+  const endpoint = await createDummyLightEndpoint(aggregator, id, name);
 
-  const getOnOffState = () => {
-    return endpoint.stateOf(OnOffServer);
+  const getLevelControlState = () => {
+    return endpoint.stateOf(LevelControlServer);
   };
 
   return {
     endpoint,
     get value() {
-      return getOnOffState().onOff;
+      return getLevelControlState().currentLevel;
     },
-    onChange(handler: (value: boolean) => void) {
-      endpoint.events.onOff.onOff$Changed.on(handler);
+    onChange(handler: (value: number) => void) {
+      endpoint.events.levelControl.currentLevel$Changed.on((value) => {
+        if (value !== null) handler(value);
+      });
+      endpoint.events.onOff.onOff$Changed.on((value) => {
+        if (value !== false) handler(0);
+      });
     },
   };
 }
 
-export async function deleteDummySwitch(
+export async function deleteDummyLight(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
-  const endpoint = await createDummySwitchEndpoint(aggregator, id, name);
+  const endpoint = await createDummyLightEndpoint(aggregator, id, name);
 
   await endpoint.delete();
 }
 
-export async function createDummySwitchEndpoint(
+export async function createDummyLightEndpoint(
   aggregator: Endpoint<AggregatorEndpoint>,
   id: string,
   name: string,
 ) {
   const endpoint = new Endpoint(
-    OnOffPlugInUnitDevice.with(BridgedDeviceBasicInformationServer),
+    DimmableLightDevice.with(BridgedDeviceBasicInformationServer),
     {
       id,
       bridgedDeviceBasicInformation: {
