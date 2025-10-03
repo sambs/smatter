@@ -4,13 +4,14 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "check-types": "tsc --noEmit",
     "start": "node ./src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@matter/main": "0.16.0-alpha.0-20250925-9e6a5c124",
-    "@project-chip/matter.js": "0.16.0-alpha.0-20250925-9e6a5c124",
+    "@matter/main": "0.16.0-alpha.0-20251003-dc6d5523d",
+    "@project-chip/matter.js": "0.16.0-alpha.0-20251003-dc6d5523d",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
