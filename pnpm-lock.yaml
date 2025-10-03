@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@matter/main':
-        specifier: 0.16.0-alpha.0-20250925-9e6a5c124
-        version: 0.16.0-alpha.0-20250925-9e6a5c124
+        specifier: 0.16.0-alpha.0-20251003-dc6d5523d
+        version: 0.16.0-alpha.0-20251003-dc6d5523d
       '@project-chip/matter.js':
-        specifier: 0.16.0-alpha.0-20250925-9e6a5c124
-        version: 0.16.0-alpha.0-20250925-9e6a5c124
+        specifier: 0.16.0-alpha.0-20251003-dc6d5523d
+        version: 0.16.0-alpha.0-20251003-dc6d5523d
     devDependencies:
       '@types/node':
         specifier: ^24.5.2
@@ -27,27 +27,27 @@ importers:
 
 packages:
 
-  '@matter/general@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-dVRkbExdFG3Nx0oA/LXFZ/DGPEnl/FjthO03qYhu67KIjbmKBufcPJBRX7NQvrj4FyWjjSDYBQhLdAvuXvs2DQ==}
+  '@matter/general@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-C7J5YsT73r82JameudAv/ybeeKWaIbO2w2YVPDEPZmDv80x8bU9PgU4kgTuNh1xVZs/e4qqjDFesP/HBjJROJw==}
 
-  '@matter/main@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-Hq/ydwPSudw+E+e9nXgwAOPjxQ13iQTiLhcVNUv6jYfYJC1JgfBSncZ7t6JtemiqQZkXCNn4jLCjtOkXffdGfQ==}
+  '@matter/main@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-OvblaavK5jjXJKXEmNUlldZJMV2Zn4haqleWXXY7sGLta3r7RMhdg03yeIly/xkvLoDmym9LIugKZUG7zD9OBg==}
 
-  '@matter/model@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-STF1WqUFzb7W9hsPUZdathyhMMs5iotRILvBDcQkb0jyFVwrkMV0GmZpgMMcpOUsSCIGzmBtvD8/ZeQh3n8kZw==}
+  '@matter/model@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-/wJA/l0jWFxL2A87DfJuW6rMxvrPbUG3zMTVeMjLyCSxQFDvsiolZfAzyrxsunUwAqu4lflQVIqBEgP9hQ/23g==}
 
-  '@matter/node@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-UzEHa6ua4QbYK7YBIj1lWEXthN2WA3zgo6fDNRj3ip82yTYNqPz37H6a4GFVuaj5wpmlPEAHheF5qLWOdMGogw==}
+  '@matter/node@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-W3B4GxwZor+J6ng8xMAUarv3SKccqo3VtlKjsy+FKWgjpi+nyJB3StryvyvI+P68g3BSdVkJf7uUQGM1aaZdzg==}
 
-  '@matter/nodejs@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-ofrlph3xUrIUS+oWgZymoUg0XVeOiMEfEi3fMnbWwJ+X11XO/BjxHwz1UdObdf5Uh/NZSfCW9MWk89XsEqkhKA==}
+  '@matter/nodejs@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-N02wJrP6aclQiQpbbMv7OSoxUtULLnGhQ7ammwqM8UNJcHh9+QV7gXbNFDdW7F3fDqMRxZZ0fyiQzH/upr07Dw==}
     engines: {node: '>=20.19.0 <22.0.0 || >=22.13.0'}
 
-  '@matter/protocol@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-EfjuHYg7+k+P/gVhDOxh7PzMn9TtV1x1DG0IzZlMngLU5gv+AD/41NoQFv91lOTrFRSFg4EdfIlY9slz+r9vOA==}
+  '@matter/protocol@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-DYBzIIFrWBtjE9R3mnI00QJ+RDmfezJl5+vpoNgv3pG7GzXzAgWtd0FSakTjYbFGs9Apr4UJvRPUGTZURKLp3g==}
 
-  '@matter/types@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-AGe2EFL83zosfK2dhXKLtlrWcc2uga5Xg919c5DQW/IOXQeXWyAmio5yqg00T69+14HYdexGZMgsrFovBoEcsg==}
+  '@matter/types@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-IHy/cn7Exc4mU21E5mjqtxkJyG7ypo61vlks66wmrPrOLH4HL4eJcOGPJy+NII4yo2ejbSfKbYvZ+jUn0cf0dg==}
 
   '@noble/curves@2.0.1':
     resolution: {integrity: sha512-vs1Az2OOTBiP4q0pwjW5aF0xp9n4MxVrmkFBxc6EKZc6ddYx5gaZiAsZoq0uRRXWbi3AT/sBqn05eRPtn1JCPw==}
@@ -57,8 +57,8 @@ packages:
     resolution: {integrity: sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw==}
     engines: {node: '>= 20.19.0'}
 
-  '@project-chip/matter.js@0.16.0-alpha.0-20250925-9e6a5c124':
-    resolution: {integrity: sha512-/TmgPXjEfbShYCT8hBbSYPsH2r4BDDLRs43Wr/7Rd69sszk2OJUpteQho3LAGkapXwvCdLyQTrFwT26BVqCVZA==}
+  '@project-chip/matter.js@0.16.0-alpha.0-20251003-dc6d5523d':
+    resolution: {integrity: sha512-n6Sznu+dGGEBO0Mdp5V2Bf5GTimRQVFxbLh3wOOYFM5lU5kj2T44lwoULleq6Js69exuyPZjX1ThTxCPn+JkZA==}
 
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
@@ -78,49 +78,49 @@ packages:
 
 snapshots:
 
-  '@matter/general@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@matter/general@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
       '@noble/curves': 2.0.1
 
-  '@matter/main@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@matter/main@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/node': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/node': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
     optionalDependencies:
-      '@matter/nodejs': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/nodejs': 0.16.0-alpha.0-20251003-dc6d5523d
 
-  '@matter/model@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@matter/model@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
 
-  '@matter/node@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@matter/node@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
 
-  '@matter/nodejs@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@matter/nodejs@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/node': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/node': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
     optional: true
 
-  '@matter/protocol@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@matter/protocol@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
 
-  '@matter/types@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@matter/types@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
 
   '@noble/curves@2.0.1':
     dependencies:
@@ -128,13 +128,13 @@ snapshots:
 
   '@noble/hashes@2.0.1': {}
 
-  '@project-chip/matter.js@0.16.0-alpha.0-20250925-9e6a5c124':
+  '@project-chip/matter.js@0.16.0-alpha.0-20251003-dc6d5523d':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/model': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/node': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/protocol': 0.16.0-alpha.0-20250925-9e6a5c124
-      '@matter/types': 0.16.0-alpha.0-20250925-9e6a5c124
+      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/node': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
 
   '@types/node@24.5.2':
     dependencies:
