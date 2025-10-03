@@ -3,6 +3,7 @@
     "allowImportingTsExtensions": true,
     "allowJs": true,
     "esModuleInterop": true,
+    "erasableSyntaxOnly": true,
     "isolatedModules": true,
     "module": "NodeNext",
     "moduleDetection": "force",

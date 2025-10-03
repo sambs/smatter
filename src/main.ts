@@ -1,6 +1,7 @@
 import { Logger } from "@matter/main";
 import { createControlBridge } from "./control/bridge.ts";
 import { createHueController } from "./hue/controller.ts";
+import { map } from "rxjs";
 
 const logger = Logger.get("Smatter");
 
@@ -19,6 +20,7 @@ const Temperature = {
  */
 const bedsideLight = hue.getLight("Bedside Light");
 const goldStandard = hue.getLight("Gold Standard");
+const deskLight = hue.getLight("Desk Light");
 const landingMotionSensor = hue.getMotionSensor("Landing Motion Sensor");
 
 /**
@@ -30,28 +32,40 @@ const lightTemperatureOffset = await controls.createLight(
   "Light Temperature",
 );
 
-isBedtime.onChange((value) => {
-  logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
-});
+// isBedtime.onChange((value) => {
+//   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
+// });
 
-lightTemperatureOffset.subscribe(bedsideLight.level.observe);
-lightTemperatureOffset.subscribe(console.log);
+isBedtime.onOff
+  .pipe(
+    map((isBedtime) => ({
+      level: isBedtime ? 200 : 100,
+      transitionTime: 5,
+    })),
+  )
+  // .subscribe(lightTemperatureOffset.level);
+  .subscribe(deskLight.level.commands.moveToLevel);
+
+lightTemperatureOffset.level.subscribe((v) => console.log(`Subscriber: ${v}`));
+
+// lightTemperatureOffset.level.subscribe(deskLight.level.observe);
+// lightTemperatureOffset.level.subscribe((v) => console.log(`subscriber: ${v}`));
 
 // lightTemperatureOffset.onChange((level) => {
 //   logger.info("Light tempererature offset", level - 128);
 //   goldStandard.intensity.set(level);
 // });
 
-landingMotionSensor.occupancy.onChange((value) => {
-  if (value) {
-    logger.info(
-      "Detected motion",
-      isBedtime.value ? "during bedtime" : "outside of bedtime",
-    );
-    bedsideLight.temperature.set(
-      isBedtime.value ? Temperature.WARM : Temperature.NEUTRAL,
-    );
-  }
-});
+// landingMotionSensor.occupancy.onChange((value) => {
+//   if (value) {
+//     logger.info(
+//       "Detected motion",
+//       isBedtime.value ? "during bedtime" : "outside of bedtime",
+//     );
+//     bedsideLight.temperature.set(
+//       isBedtime.value ? Temperature.WARM : Temperature.NEUTRAL,
+//     );
+//   }
+// });
 
 await controls.server.start();

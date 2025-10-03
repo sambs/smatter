@@ -5,6 +5,7 @@ import {
   BridgedDeviceBasicInformationServer,
   OnOffServer,
 } from "@matter/main/behaviors";
+import { Subject } from "rxjs";
 
 export async function createSwitchControl(
   aggregator: Endpoint<AggregatorEndpoint>,
@@ -13,18 +14,19 @@ export async function createSwitchControl(
 ) {
   const endpoint = await createSwitchControlEndpoint(aggregator, id, name);
 
-  const getOnOffState = () => {
-    return endpoint.stateOf(OnOffServer);
-  };
+  const onOff = new Subject<boolean>();
+
+  onOff.subscribe({
+    next: (v) => console.log(`Switch ${id} ${name}: ${v}`),
+  });
+
+  endpoint.events.onOff.onOff$Changed.on((value) => {
+    onOff.next(value);
+  });
 
   return {
     endpoint,
-    get value() {
-      return getOnOffState().onOff;
-    },
-    onChange(handler: (value: boolean) => void) {
-      endpoint.events.onOff.onOff$Changed.on(handler);
-    },
+    onOff,
   };
 }
 

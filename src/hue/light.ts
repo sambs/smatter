@@ -54,20 +54,19 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
           optionsOverride: { coupleColorTempToLevel: true },
         });
       },
-      observe: {
-        next: (value) => {
-          level?.moveToLevel({
-            level: value,
-            transitionTime: 0,
-            optionsMask: { coupleColorTempToLevel: true }, // Specify that we want executeIfOff to be respected
-            optionsOverride: { coupleColorTempToLevel: true },
-          });
+      commands: {
+        moveToLevel: {
+          next: (request: Partial<LevelControl.MoveToLevelRequest>) => {
+            level?.moveToLevel({
+              level: 128,
+              transitionTime: 0,
+              optionsMask: { coupleColorTempToLevel: true }, // Specify that we want executeIfOff to be respected
+              optionsOverride: { coupleColorTempToLevel: true },
+              ...request,
+            });
+          },
         },
-        error: (error) =>
-          console.error("Light level observer got an error: " + error),
-        complete: () =>
-          console.log("Light level observer got a complete notification"),
-      } as Observer<number>,
+      },
     },
     temperature: {
       get value() {

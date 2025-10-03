@@ -5,7 +5,8 @@ import {
   BridgedDeviceBasicInformationServer,
   LevelControlServer,
 } from "@matter/main/behaviors";
-import { Observable } from "rxjs";
+import { InterceptingSubject } from "../rxjs/intercepting-subject.ts";
+import type { LevelControl } from "@matter/main/clusters";
 
 export async function createLightControl(
   aggregator: Endpoint<AggregatorEndpoint>,
@@ -14,33 +15,53 @@ export async function createLightControl(
 ) {
   const endpoint = await createLightControlEndpoint(aggregator, id, name);
 
-  const getLevelControlState = () => {
-    return endpoint.stateOf(LevelControlServer);
+  const level = new InterceptingSubject<number | null>(
+    endpoint.events.levelControl.currentLevel$Changed,
+    (level) => {
+      if (level !== null) {
+        endpoint.commands.levelControl.moveToLevel({
+          level,
+          transitionTime: 0,
+          optionsMask: { coupleColorTempToLevel: true }, // Specify that we want executeIfOff to be respected
+          optionsOverride: { coupleColorTempToLevel: true },
+        });
+      }
+    },
+  );
+  endpoint.events.levelControl.addEvent;
+
+  const commands = {
+    level: {
+      moveToLevel: {
+        next: (request: Partial<LevelControl.MoveToLevelRequest>) => {
+          endpoint.commands.levelControl.moveToLevel({
+            level: 128,
+            transitionTime: 0,
+            optionsMask: { coupleColorTempToLevel: true }, // Specify that we want executeIfOff to be respected
+            optionsOverride: { coupleColorTempToLevel: true },
+            ...request,
+          });
+        },
+      },
+    },
   };
 
-  const observable = new Observable<number>((subscriber) => {
-    endpoint.events.levelControl.currentLevel$Changed.on((value) => {
-      if (value !== null) subscriber.next(value);
-    });
-    endpoint.events.onOff.onOff$Changed.on((value) => {
-      if (value !== false) subscriber.next(0);
-    });
-  });
+  // level.subscribe({
+  //   next: (v) => console.log(`Light ${id} ${name}: ${v}`),
+  // });
+  //
+  // endpoint.events.levelControl.currentLevel$Changed.on((value) => {
+  //   if (value !== null) level.next(value);
+  // });
+  //
+  // endpoint.events.onOff.onOff$Changed.on((value) => {
+  //   if (value === false) level.next(0);
+  // });
 
   return {
     endpoint,
-    get value() {
-      return getLevelControlState().currentLevel;
-    },
-    onChange(handler: (value: number) => void) {
-      endpoint.events.levelControl.currentLevel$Changed.on((value) => {
-        if (value !== null) handler(value);
-      });
-      endpoint.events.onOff.onOff$Changed.on((value) => {
-        if (value !== false) handler(0);
-      });
-    },
-    subscribe: observable.subscribe.bind(observable),
+    level,
+    commands,
   };
 }
 
