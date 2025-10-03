@@ -11,60 +11,58 @@ const hue = await createHueController();
 /**
  * Real Hue devices
  */
+
 const bedsideLight = hue.getLight("Bedside Light");
 const goldStandard = hue.getLight("Gold Standard");
 const deskLight = hue.getLight("Desk Light");
+const deskSwitch = hue.getDimmerSwitch("Desk Switch");
 const landingMotionSensor = hue.getMotionSensor("Landing Motion Sensor");
 
 /**
  * Fake devices used as control inputs
  */
+
 const isBedtime = await controls.createSwitch("bedtime-switch", "Bedtime");
 const lightTemp = await controls.createSlider(
   "light-temp-offset",
   "Light Temperature",
 );
 
+/**
+ * Log things
+ */
+
 isBedtime.subscribe((value) => {
   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
 });
+lightTemp.subscribe((v) => console.log(`Light temp: ${v}`));
+deskLight.isOn.subscribe((v) => console.log(`Desk Light isOn: ${v}`));
 
-isBedtime
-  .pipe(
-    withLatestFrom(lightTemp),
-    map(([isBedtime, lightTemp]) => ({
-      level: isBedtime ? lightTemp / 2 : lightTemp,
-      transitionTime: 5,
-    })),
-  )
-  .subscribe(deskLight.moveToLevel);
+/**
+ * Do things
+ */
 
-lightTemp.subscribe((v) => console.log(`lightTemp: ${v}`));
+isBedtime.pipe(map((isBedtime) => (isBedtime ? 70 : 200))).subscribe(lightTemp);
+
+// deskSwitch.topButton.initialPress
+//   .pipe(
+//     withLatestFrom(isBedtime),
+//     map(([_event, isBedtime]) => ({
+//       level: isBedtime ? 75 : 200,
+//       transitionTime: 5,
+//     })),
+//   )
+//   .subscribe(deskLight.moveToLevelWithOnOff);
+
+deskSwitch.topButton.initialPress.subscribe(deskLight.turnOn);
+deskSwitch.bottomButton.initialPress.subscribe(deskLight.turnOff);
 
 lightTemp
   .pipe(map((level) => ({ intensity: level })))
   .subscribe(deskLight.moveToIntensity);
 
-deskLight.isOn.subscribe((v) => console.log(`desk light on: ${v}`));
-
-// lightTemperatureOffset.level.subscribe(deskLight.level.observe);
-// lightTemperatureOffset.level.subscribe((v) => console.log(`subscriber: ${v}`));
-
-// lightTemperatureOffset.onChange((level) => {
-//   logger.info("Light tempererature offset", level - 128);
-//   goldStandard.intensity.set(level);
-// });
-
-// landingMotionSensor.occupancy.onChange((value) => {
-//   if (value) {
-//     logger.info(
-//       "Detected motion",
-//       isBedtime.value ? "during bedtime" : "outside of bedtime",
-//     );
-//     bedsideLight.temperature.set(
-//       isBedtime.value ? Temperature.WARM : Temperature.NEUTRAL,
-//     );
-//   }
-// });
+/**
+ * Start
+ */
 
 await controls.server.start();

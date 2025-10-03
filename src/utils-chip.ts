@@ -5,6 +5,7 @@ import {
   BridgedDeviceBasicInformation,
   OccupancySensing,
   OnOff,
+  Switch,
 } from "@matter/main/clusters";
 
 export async function inspectEndpoint(endpoint: Endpoint, level = 0) {
@@ -12,19 +13,21 @@ export async function inspectEndpoint(endpoint: Endpoint, level = 0) {
     `Inspecting endpoint "${endpoint.name}" { number: ${endpoint.number}, level: ${level} }`,
   );
 
-  // console.log(
-  //   "Descriptor",
-  //   endpoint
-  //     .getClusterClient(Descriptor.Complete)
-  //     ?.getTagListAttributeFromCache(),
-  // );
+  console.log(Object.keys(endpoint.commands), endpoint.getDeviceTypes());
 
-  // console.log(
-  //   "BasicInformation.nodeLabel",
-  //   endpoint
-  //     .getClusterClient(BasicInformation.Complete)
-  //     ?.getNodeLabelAttributeFromCache(),
-  // );
+  console.log(
+    "Descriptor",
+    endpoint
+      .getClusterClient(Descriptor.Complete)
+      ?.getTagListAttributeFromCache(),
+  );
+
+  console.log(
+    "BasicInformation.nodeLabel",
+    endpoint
+      .getClusterClient(BasicInformation.Complete)
+      ?.getNodeLabelAttributeFromCache(),
+  );
 
   console.log(
     "BridgedDeviceBasicInformation.nodeLabel",
@@ -38,10 +41,9 @@ export async function inspectEndpoint(endpoint: Endpoint, level = 0) {
     !!endpoint.getClusterClient(OccupancySensing.Complete),
   );
 
-  console.log(
-    "OnOff.onOff",
-    await endpoint.getClusterClient(OnOff.Complete)?.getOnOffAttribute(),
-  );
+  console.log("OnOff", !!endpoint.getClusterClient(OnOff.Complete));
+
+  console.log("Switch", !!endpoint.getClusterClient(Switch.Complete));
 
   // const label = endpoint.getClusterClient(UserLabel.Complete);
   // if (label !== undefined) {

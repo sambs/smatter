@@ -48,7 +48,7 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
     },
     turnOff: {
       next: () => {
-        onOffClient?.on();
+        onOffClient?.off();
       },
     },
     level: new Observable<number>((subscriber) => {
@@ -68,6 +68,17 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
     moveToLevel: {
       next: (request: Partial<LevelControl.MoveToLevelRequest>) => {
         levelClient?.moveToLevel({
+          level: 128,
+          transitionTime: 0,
+          optionsMask: { executeIfOff: true },
+          optionsOverride: { executeIfOff: true },
+          ...request,
+        });
+      },
+    },
+    moveToLevelWithOnOff: {
+      next: (request: Partial<LevelControl.MoveToLevelRequest>) => {
+        levelClient?.moveToLevelWithOnOff({
           level: 128,
           transitionTime: 0,
           optionsMask: { executeIfOff: true },

@@ -8,6 +8,7 @@ import {
 } from "@matter/main/clusters";
 import { getLight } from "./light.ts";
 import { getMotionSensor } from "./motion-sensor.ts";
+import { getDimmerSwitch } from "./dimmer-switch.ts";
 
 const environment = Environment.default;
 const logger = Logger.get("Controller");
@@ -16,12 +17,15 @@ const ID = "hue-controller";
 
 function createCommissioningController() {
   return new CommissioningController({
+    adminFabricLabel: ID,
     environment: {
       environment,
       id: ID,
     },
-    autoConnect: true, // Auto connect to the commissioned nodes
-    adminFabricLabel: ID,
+    // These are the defaults:
+    autoConnect: true,
+    autoSubscribe: true, // false doesn't seem to make any difference
+    subscribeMinIntervalFloorSeconds: 1,
   });
 }
 
@@ -118,6 +122,9 @@ export async function createHueController(logAll = false) {
   return {
     controller,
     aggregator,
+    getDimmerSwitch: (name: string) => {
+      return getDimmerSwitch(logger, name, namedEndpoints[name]);
+    },
     getLight: (name: string) => {
       return getLight(logger, name, namedEndpoints[name]);
     },
