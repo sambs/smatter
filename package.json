@@ -4,6 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "check-types": "tsc --noEmit",
     "start": "node ./src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
