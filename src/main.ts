@@ -34,10 +34,13 @@ isBedtime.onChange((value) => {
   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
 });
 
-lightTemperatureOffset.onChange((level) => {
-  logger.info("Light tempererature offset", level - 128);
-  goldStandard.intensity.set(level);
-});
+lightTemperatureOffset.subscribe(bedsideLight.level.observe);
+lightTemperatureOffset.subscribe(console.log);
+
+// lightTemperatureOffset.onChange((level) => {
+//   logger.info("Light tempererature offset", level - 128);
+//   goldStandard.intensity.set(level);
+// });
 
 landingMotionSensor.occupancy.onChange((value) => {
   if (value) {

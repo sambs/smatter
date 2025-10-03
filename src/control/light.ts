@@ -5,6 +5,7 @@ import {
   BridgedDeviceBasicInformationServer,
   LevelControlServer,
 } from "@matter/main/behaviors";
+import { Observable } from "rxjs";
 
 export async function createLightControl(
   aggregator: Endpoint<AggregatorEndpoint>,
@@ -16,6 +17,15 @@ export async function createLightControl(
   const getLevelControlState = () => {
     return endpoint.stateOf(LevelControlServer);
   };
+
+  const observable = new Observable<number>((subscriber) => {
+    endpoint.events.levelControl.currentLevel$Changed.on((value) => {
+      if (value !== null) subscriber.next(value);
+    });
+    endpoint.events.onOff.onOff$Changed.on((value) => {
+      if (value !== false) subscriber.next(0);
+    });
+  });
 
   return {
     endpoint,
@@ -30,6 +40,7 @@ export async function createLightControl(
         if (value !== false) handler(0);
       });
     },
+    subscribe: observable.subscribe.bind(observable),
   };
 }
 

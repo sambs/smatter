@@ -10,7 +10,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@matter/main": "0.16.0-alpha.0-20250925-9e6a5c124",
-    "@project-chip/matter.js": "0.16.0-alpha.0-20250925-9e6a5c124"
+    "@project-chip/matter.js": "0.16.0-alpha.0-20250925-9e6a5c124",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@types/node": "^24.5.2",

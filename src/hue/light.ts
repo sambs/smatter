@@ -2,6 +2,7 @@ import { Diagnostic, type Logger } from "@matter/main";
 import type { Endpoint } from "@project-chip/matter.js/device";
 import { ColorControl, LevelControl, OnOff } from "@matter/main/clusters";
 import { clamp } from "../utils.ts";
+import type { Observer } from "rxjs";
 
 const INTESITY_COLOR_TEMPERATURE_OFFSET = 500;
 
@@ -53,6 +54,20 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
           optionsOverride: { coupleColorTempToLevel: true },
         });
       },
+      observe: {
+        next: (value) => {
+          level?.moveToLevel({
+            level: value,
+            transitionTime: 0,
+            optionsMask: { coupleColorTempToLevel: true }, // Specify that we want executeIfOff to be respected
+            optionsOverride: { coupleColorTempToLevel: true },
+          });
+        },
+        error: (error) =>
+          console.error("Light level observer got an error: " + error),
+        complete: () =>
+          console.log("Light level observer got a complete notification"),
+      } as Observer<number>,
     },
     temperature: {
       get value() {
