@@ -39,6 +39,3 @@ function createSwitchObservables(endpoint?: Endpoint) {
     }),
   };
 }
-
-// The delay between the original event time and now
-// event.epochTimestamp && BigInt(Date.now()) - BigInt(event.epochTimestamp),
