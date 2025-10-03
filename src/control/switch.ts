@@ -1,65 +1,42 @@
+import { BehaviorSubject } from "rxjs";
 import { Endpoint } from "@matter/main";
-import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
 import { OnOffPlugInUnitDevice } from "@matter/main/devices";
-import {
-  BridgedDeviceBasicInformationServer,
-  OnOffServer,
-} from "@matter/main/behaviors";
-import { Subject } from "rxjs";
+import { BridgedDeviceBasicInformationServer } from "@matter/main/behaviors";
 
-export async function createSwitchControl(
-  aggregator: Endpoint<AggregatorEndpoint>,
-  id: string,
-  name: string,
-) {
-  const endpoint = await createSwitchControlEndpoint(aggregator, id, name);
+export class Switch extends BehaviorSubject<boolean> {
+  endpoint: Endpoint<OnOffPlugInUnitDevice>;
 
-  const onOff = new Subject<boolean>();
+  constructor(endpoint: Endpoint<OnOffPlugInUnitDevice>) {
+    super(endpoint.state.onOff.onOff);
 
-  onOff.subscribe({
-    next: (v) => console.log(`Switch ${id} ${name}: ${v}`),
-  });
+    this.endpoint = endpoint;
 
-  endpoint.events.onOff.onOff$Changed.on((value) => {
-    onOff.next(value);
-  });
+    endpoint.events.onOff.onOff$Changed.on((value) => {
+      super.next(value);
+    });
+  }
 
-  return {
-    endpoint,
-    onOff,
-  };
-}
+  override next(value: boolean): void {
+    if (value) {
+      this.endpoint.commands.onOff.on(undefined);
+    } else {
+      this.endpoint.commands.onOff.off(undefined);
+    }
+  }
 
-export async function deleteSwitchControl(
-  aggregator: Endpoint<AggregatorEndpoint>,
-  id: string,
-  name: string,
-) {
-  const endpoint = await createSwitchControlEndpoint(aggregator, id, name);
-
-  await endpoint.delete();
-}
-
-export async function createSwitchControlEndpoint(
-  aggregator: Endpoint<AggregatorEndpoint>,
-  id: string,
-  name: string,
-) {
-  const endpoint = new Endpoint(
-    OnOffPlugInUnitDevice.with(BridgedDeviceBasicInformationServer),
-    {
-      id,
-      bridgedDeviceBasicInformation: {
-        nodeLabel: name, // Main end user name for the device
-        productName: `${name} Product`,
-        productLabel: `${name} Product Label`,
-        serialNumber: `${id}-serial`,
-        reachable: true,
+  static createEndpoint(id: string, name: string) {
+    return new Endpoint(
+      OnOffPlugInUnitDevice.with(BridgedDeviceBasicInformationServer),
+      {
+        id,
+        bridgedDeviceBasicInformation: {
+          nodeLabel: name, // Main end user name for the device
+          productName: `${name} Product`,
+          productLabel: `${name} Product Label`,
+          serialNumber: `${id}-serial`,
+          reachable: true,
+        },
       },
-    },
-  );
-
-  await aggregator.add(endpoint);
-
-  return endpoint;
+    );
+  }
 }

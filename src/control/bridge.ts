@@ -1,7 +1,7 @@
 import { Endpoint, ServerNode, VendorId } from "@matter/main";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
-import { createLightControl } from "./light.ts";
-import { createSwitchControl } from "./switch.ts";
+import { Switch } from "./switch.ts";
+import { Slider } from "./slider.ts";
 
 const BRIDGE_ID = "control-bridge";
 const BRIDGE_NAME = "Control Bridge";
@@ -56,11 +56,23 @@ export async function createControlBridge() {
 
   return {
     server,
-    createLight(id: string, name: string) {
-      return createLightControl(aggregator, id, name);
+    async createSwitch(id: string, name: string): Promise<Switch> {
+      const endpoint = Switch.createEndpoint(id, name);
+      await aggregator.add(endpoint);
+      return new Switch(endpoint);
     },
-    createSwitch(id: string, name: string) {
-      return createSwitchControl(aggregator, id, name);
+    async deleteSwitch(id: string, name: string): Promise<void> {
+      const slider = await this.createSwitch(id, name);
+      await slider.endpoint.delete();
+    },
+    async createSlider(id: string, name: string): Promise<Slider> {
+      const endpoint = Slider.createEndpoint(id, name);
+      await aggregator.add(endpoint);
+      return new Slider(endpoint);
+    },
+    async deleteSlider(id: string, name: string): Promise<void> {
+      const slider = await this.createSlider(id, name);
+      await slider.endpoint.delete();
     },
   };
 }

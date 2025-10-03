@@ -1,7 +1,7 @@
 import { Logger } from "@matter/main";
 import { createControlBridge } from "./control/bridge.ts";
 import { createHueController } from "./hue/controller.ts";
-import { map } from "rxjs";
+import { map, tap, withLatestFrom } from "rxjs";
 
 const logger = Logger.get("Smatter");
 
@@ -27,26 +27,26 @@ const landingMotionSensor = hue.getMotionSensor("Landing Motion Sensor");
  * Fake devices used as control inputs
  */
 const isBedtime = await controls.createSwitch("bedtime-switch", "Bedtime");
-const lightTemperatureOffset = await controls.createLight(
+const lightTemp = await controls.createSlider(
   "light-temp-offset",
   "Light Temperature",
 );
 
-// isBedtime.onChange((value) => {
-//   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
-// });
+isBedtime.subscribe((value) => {
+  logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
+});
 
-isBedtime.onOff
+isBedtime
   .pipe(
-    map((isBedtime) => ({
-      level: isBedtime ? 200 : 100,
+    withLatestFrom(lightTemp),
+    map(([isBedtime, lightTemp]) => ({
+      level: isBedtime ? lightTemp / 2 : lightTemp,
       transitionTime: 5,
     })),
   )
-  // .subscribe(lightTemperatureOffset.level);
   .subscribe(deskLight.level.commands.moveToLevel);
 
-lightTemperatureOffset.level.subscribe((v) => console.log(`Subscriber: ${v}`));
+lightTemp.subscribe((v) => console.log(`lightTemp: ${v}`));
 
 // lightTemperatureOffset.level.subscribe(deskLight.level.observe);
 // lightTemperatureOffset.level.subscribe((v) => console.log(`subscriber: ${v}`));
