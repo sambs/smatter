@@ -44,7 +44,7 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
     },
     level: {
       get value() {
-        return color?.attributes.colorTemperatureMireds.getLocal();
+        return level?.attributes.currentLevel.getLocal();
       },
       set: async (value: number, transitionTime: null | number = null) => {
         await level?.moveToLevel({
