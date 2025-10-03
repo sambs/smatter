@@ -1,10 +1,11 @@
+import { Observable } from "rxjs";
 import { type Logger } from "@matter/main";
-import type { Endpoint } from "@project-chip/matter.js/device";
+import type { ClusterClientObj } from "@matter/main/protocol";
 import {
   OccupancySensing,
   TemperatureMeasurement,
 } from "@matter/main/clusters";
-import type { ClusterClientObj } from "@matter/main/protocol";
+import type { Endpoint } from "@project-chip/matter.js/device";
 
 export function getMotionSensor(
   logger: Logger,
@@ -15,19 +16,23 @@ export function getMotionSensor(
     logger.warn(`Motion Sensor "${name}" not found"`);
   }
 
-  let occupancy: ClusterClientObj<OccupancySensing.Complete> | undefined;
-  let temperature: ClusterClientObj<TemperatureMeasurement.Cluster> | undefined;
+  let occupancyClient: ClusterClientObj<OccupancySensing.Complete> | undefined;
+  let temperatureClient:
+    | ClusterClientObj<TemperatureMeasurement.Cluster>
+    | undefined;
 
   if (endpoint) {
     for (const child of endpoint?.parts.values()) {
-      if (!occupancy) {
-        occupancy = child.getClusterClient(OccupancySensing.Complete);
+      if (!occupancyClient) {
+        occupancyClient = child.getClusterClient(OccupancySensing.Complete);
       }
-      if (!temperature) {
-        temperature = child.getClusterClient(TemperatureMeasurement.Complete);
+      if (!temperatureClient) {
+        temperatureClient = child.getClusterClient(
+          TemperatureMeasurement.Complete,
+        );
       }
     }
-    if (!occupancy) {
+    if (!occupancyClient) {
       logger.warn(
         `"${name}" is missing the occupancy behviour and may not be a motion sensor`,
       );
@@ -35,25 +40,35 @@ export function getMotionSensor(
   }
 
   return {
-    occupancy: {
-      get value() {
-        return occupancy?.attributes.occupancy.getLocal();
-      },
-      onChange: (handler: (occupied: boolean) => void) => {
-        occupancy?.attributes.occupancy.addListener((value) => {
-          if (value && value.occupied !== undefined) {
-            handler(value.occupied);
+    isOccupied: new Observable<boolean>((subscriber) => {
+      if (occupancyClient) {
+        occupancyClient.attributes.occupancy.addListener(({ occupied }) => {
+          if (occupied !== undefined) {
+            subscriber.next(occupied);
           }
         });
-      },
-    },
-    temperature: {
-      get value() {
-        return temperature?.attributes.measuredValue.getLocal() ?? null;
-      },
-      onChange: (handler: (temperature: number | null) => void) => {
-        temperature?.attributes.measuredValue.addListener(handler);
-      },
-    },
+        occupancyClient.attributes.occupancy.get().then((value) => {
+          if (value?.occupied !== undefined) {
+            subscriber.next(value.occupied);
+          }
+        });
+      }
+    }),
+    temperature: new Observable<number>((subscriber) => {
+      if (temperatureClient) {
+        temperatureClient.attributes.measuredValue.addListener(
+          (temperature) => {
+            if (temperature !== null) {
+              subscriber.next(temperature);
+            }
+          },
+        );
+        temperatureClient.attributes.measuredValue.get().then((temperature) => {
+          if (temperature !== undefined && temperature !== null) {
+            subscriber.next(temperature);
+          }
+        });
+      }
+    }),
   };
 }

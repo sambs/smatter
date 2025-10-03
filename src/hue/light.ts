@@ -1,113 +1,128 @@
-import { Diagnostic, type Logger } from "@matter/main";
-import type { Endpoint } from "@project-chip/matter.js/device";
+import { Observable } from "rxjs";
+import { type Logger } from "@matter/main";
 import { ColorControl, LevelControl, OnOff } from "@matter/main/clusters";
+import type { BitFlag, TypeFromPartialBitSchema } from "@matter/main/types";
+import type { Endpoint } from "@project-chip/matter.js/device";
 import { clamp } from "../utils.ts";
-import type { Observer } from "rxjs";
+import { ColorTemperature } from "../constants.ts";
 
 const INTESITY_COLOR_TEMPERATURE_OFFSET = 500;
+
+type MoveToIntensityRequest = {
+  intensity: number;
+  transitionTime: number;
+  optionsMask: TypeFromPartialBitSchema<{
+    executeIfOff: BitFlag;
+  }>;
+  optionsOverride: TypeFromPartialBitSchema<{
+    executeIfOff: BitFlag;
+  }>;
+};
 
 export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
   if (!endpoint) {
     logger.warn(`Light "${name}" not found"`);
   }
 
-  const onOff = endpoint?.getClusterClient(OnOff.Complete);
-  const color = endpoint?.getClusterClient(ColorControl.Complete);
-  const level = endpoint?.getClusterClient(LevelControl.Complete);
-
-  if (endpoint && !onOff) {
-    logger.warn(
-      `Light "${name}" is missing the onOff behviour and may not be a light`,
-    );
-  }
-
-  color
-    ?.getOptionsAttribute()
-    .then((options) =>
-      logger.info(`${name} color options: ${Diagnostic.json(options)}`),
-    );
+  const onOffClient = endpoint?.getClusterClient(OnOff.Complete);
+  const colorClient = endpoint?.getClusterClient(ColorControl.Complete);
+  const levelClient = endpoint?.getClusterClient(LevelControl.Complete);
 
   return {
-    onOff: {
-      get value() {
-        return onOff?.attributes.onOff.getLocal();
-      },
-      toggle: async () => {
-        await onOff?.toggle();
-      },
-      on: async () => {
-        await onOff?.on();
-      },
-      off: async () => {
-        await onOff?.off();
+    isOn: new Observable<boolean>((subscriber) => {
+      if (onOffClient) {
+        onOffClient.attributes.onOff.addListener((value) => {
+          subscriber.next(value);
+        });
+        onOffClient.attributes.onOff.get().then((value) => {
+          if (value !== undefined) {
+            subscriber.next(value);
+          }
+        });
+      }
+    }),
+    turnOn: {
+      next: () => {
+        onOffClient?.on();
       },
     },
-    level: {
-      get value() {
-        return level?.attributes.currentLevel.getLocal();
+    turnOff: {
+      next: () => {
+        onOffClient?.on();
       },
-      set: async (value: number, transitionTime: null | number = null) => {
-        await level?.moveToLevel({
-          level: value,
-          transitionTime,
-          optionsMask: { coupleColorTempToLevel: true }, // Specify that we want executeIfOff to be respected
-          optionsOverride: { coupleColorTempToLevel: true },
+    },
+    level: new Observable<number>((subscriber) => {
+      if (levelClient) {
+        levelClient.attributes.currentLevel.addListener((level) => {
+          if (level !== null) {
+            subscriber.next(level);
+          }
+        });
+        levelClient.attributes.currentLevel.get().then((level) => {
+          if (level !== undefined && level !== null) {
+            subscriber.next(level);
+          }
+        });
+      }
+    }),
+    moveToLevel: {
+      next: (request: Partial<LevelControl.MoveToLevelRequest>) => {
+        levelClient?.moveToLevel({
+          level: 128,
+          transitionTime: 0,
+          optionsMask: { executeIfOff: true },
+          optionsOverride: { executeIfOff: true },
+          ...request,
         });
       },
-      commands: {
-        moveToLevel: {
-          next: (request: Partial<LevelControl.MoveToLevelRequest>) => {
-            level?.moveToLevel({
-              level: 128,
-              transitionTime: 0,
-              optionsMask: { coupleColorTempToLevel: true }, // Specify that we want executeIfOff to be respected
-              optionsOverride: { coupleColorTempToLevel: true },
-              ...request,
-            });
+    },
+    colorTemperature: new Observable<number>((subscriber) => {
+      if (colorClient) {
+        colorClient.attributes.colorTemperatureMireds.addListener(
+          (temperature) => {
+            if (temperature !== undefined) {
+              subscriber.next(temperature);
+            }
           },
-        },
-      },
-    },
-    temperature: {
-      get value() {
-        return color?.attributes.colorTemperatureMireds.getLocal();
-      },
-      set: async (
-        temperature: number,
-        transitionTime: number = 0, // in tenths of a second
-        executeIfOff = true,
-      ) => {
-        await color?.moveToColorTemperature({
-          colorTemperatureMireds: temperature,
-          transitionTime,
-          optionsMask: { executeIfOff: true }, // Specify that we want executeIfOff to be respected
-          optionsOverride: { executeIfOff },
+        );
+        colorClient.attributes.colorTemperatureMireds
+          .get()
+          .then((temperature) => {
+            if (temperature !== undefined) {
+              subscriber.next(temperature);
+            }
+          });
+      }
+    }),
+    moveToColorTemperature: {
+      next: (request: Partial<ColorControl.MoveToColorTemperatureRequest>) => {
+        colorClient?.moveToColorTemperature({
+          colorTemperatureMireds: ColorTemperature.WARM,
+          transitionTime: 0,
+          optionsMask: { executeIfOff: true },
+          optionsOverride: { executeIfOff: true },
+          ...request,
         });
       },
     },
-    intensity: {
-      get value() {
-        const colorTemperature =
-          color?.attributes.colorTemperatureMireds.getLocal();
-        return colorTemperature === undefined
-          ? undefined
-          : colorTemperature + INTESITY_COLOR_TEMPERATURE_OFFSET;
-      },
-      set: async (
-        value: number,
-        transitionTime: number = 0, // in tenths of a second
-      ) => {
-        color?.moveToColorTemperature({
-          colorTemperatureMireds: INTESITY_COLOR_TEMPERATURE_OFFSET - value,
-          transitionTime,
-          optionsMask: {},
-          optionsOverride: {},
+    moveToIntensity: {
+      next: ({ intensity, ...request }: Partial<MoveToIntensityRequest>) => {
+        intensity = intensity ?? 127;
+
+        colorClient?.moveToColorTemperature({
+          colorTemperatureMireds: INTESITY_COLOR_TEMPERATURE_OFFSET - intensity,
+          transitionTime: 0,
+          optionsMask: { executeIfOff: true },
+          optionsOverride: { executeIfOff: true },
+          ...request,
         });
-        level?.moveToLevel({
-          level: clamp(value * 1.2, 0, 254),
-          transitionTime,
-          optionsMask: {},
-          optionsOverride: {},
+
+        levelClient?.moveToLevel({
+          level: clamp(intensity * 1.2, 0, 254),
+          transitionTime: 0,
+          optionsMask: { executeIfOff: true },
+          optionsOverride: { executeIfOff: true },
+          ...request,
         });
       },
     },

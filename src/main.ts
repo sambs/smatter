@@ -1,19 +1,12 @@
 import { Logger } from "@matter/main";
 import { createControlBridge } from "./control/bridge.ts";
 import { createHueController } from "./hue/controller.ts";
-import { map, tap, withLatestFrom } from "rxjs";
+import { map, withLatestFrom } from "rxjs";
 
 const logger = Logger.get("Smatter");
 
 const controls = await createControlBridge();
 const hue = await createHueController();
-
-const Temperature = {
-  COOL: 300,
-  NEUTRAL: 350,
-  WARM: 400,
-  SEEDY: 450,
-} as const;
 
 /**
  * Real Hue devices
@@ -44,9 +37,15 @@ isBedtime
       transitionTime: 5,
     })),
   )
-  .subscribe(deskLight.level.commands.moveToLevel);
+  .subscribe(deskLight.moveToLevel);
 
 lightTemp.subscribe((v) => console.log(`lightTemp: ${v}`));
+
+lightTemp
+  .pipe(map((level) => ({ intensity: level })))
+  .subscribe(deskLight.moveToIntensity);
+
+deskLight.isOn.subscribe((v) => console.log(`desk light on: ${v}`));
 
 // lightTemperatureOffset.level.subscribe(deskLight.level.observe);
 // lightTemperatureOffset.level.subscribe((v) => console.log(`subscriber: ${v}`));
