@@ -60,9 +60,3 @@ deskSwitch.bottomButton.initialPress.subscribe(deskLight.turnOff);
 lightTemp
   .pipe(map((level) => ({ intensity: level })))
   .subscribe(deskLight.moveToIntensity);
-
-/**
- * Start
- */
-
-await controls.server.start();

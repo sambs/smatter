@@ -11,7 +11,7 @@ import { getMotionSensor } from "./motion-sensor.ts";
 import { getDimmerSwitch } from "./dimmer-switch.ts";
 
 const environment = Environment.default;
-const logger = Logger.get("Controller");
+const logger = Logger.get("HueController");
 
 const ID = "hue-controller";
 

@@ -54,6 +54,8 @@ export async function createControlBridge() {
 
   await server.add(aggregator);
 
+  await server.start();
+
   return {
     server,
     async createSwitch(id: string, name: string): Promise<Switch> {
