@@ -1,7 +1,11 @@
+import { map, withLatestFrom } from "rxjs";
 import { Logger } from "@matter/main";
 import { createControlBridge } from "./control/bridge.ts";
 import { createHueController } from "./hue/controller.ts";
-import { map, withLatestFrom } from "rxjs";
+import { locationFromEnv } from "./location.ts";
+import { createSolarEvents } from "./solar-events.ts";
+
+const location = locationFromEnv();
 
 const logger = Logger.get("Smatter");
 
@@ -29,14 +33,28 @@ const lightTemp = await controls.createSlider(
 );
 
 /**
+ * External inputs
+ */
+
+const solarEvents = createSolarEvents(location, {
+  offsets: {
+    sunrise: { minutes: -10 },
+    sunset: { minutes: 5 },
+  },
+});
+
+/**
  * Log things
  */
 
+solarEvents.subscribe((e) => {
+  logger.info(`SolarEvent: ${e.name} at ${e.at.toString()}`);
+});
 isBedtime.subscribe((value) => {
   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
 });
-lightTemp.subscribe((v) => console.log(`Light temp: ${v}`));
-deskLight.isOn.subscribe((v) => console.log(`Desk Light isOn: ${v}`));
+lightTemp.subscribe((v) => logger.info(`Light temp: ${v}`));
+deskLight.isOn.subscribe((v) => logger.info(`Desk Light isOn: ${v}`));
 
 /**
  * Do things
