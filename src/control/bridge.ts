@@ -8,7 +8,7 @@ const BRIDGE_NAME = "Control Bridge";
 const VENDOR_NAME = "sambs";
 const VENDOR_ID = 0xfff1;
 
-export async function createControlBridge() {
+export async function initControlBridge() {
   /**
    * Create a Matter ServerNode, which contains the Root Endpoint and all relevant data and configuration
    */

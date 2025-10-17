@@ -1,4 +1,4 @@
-import { Diagnostic, Environment, Logger } from "@matter/main";
+import { Diagnostic, Logger, NodeId } from "@matter/main";
 import { CommissioningController } from "@project-chip/matter.js";
 import { Endpoint, NodeStates } from "@project-chip/matter.js/device";
 import { ManualPairingCodeCodec } from "@matter/main/types";
@@ -10,43 +10,14 @@ import { getLight } from "./light.ts";
 import { getMotionSensor } from "./motion-sensor.ts";
 import { getDimmerSwitch } from "./dimmer-switch.ts";
 
-const environment = Environment.default;
-const logger = Logger.get("HueController");
+const logger = Logger.get("HueBridge");
 
-const ID = "hue-controller";
-
-function createCommissioningController() {
-  return new CommissioningController({
-    adminFabricLabel: ID,
-    environment: {
-      environment,
-      id: ID,
-    },
-    // These are the defaults:
-    autoConnect: true,
-    autoSubscribe: true, // false doesn't seem to make any difference
-    subscribeMinIntervalFloorSeconds: 1,
-  });
-}
-
-export async function createHueController(logAll = false) {
-  const controller = createCommissioningController();
-
-  await controller.start();
-
-  if (!controller.isCommissioned()) {
-    throw new Error("Controller is not commissioned!");
-  }
-
-  const nodeIds = controller.getCommissionedNodes();
-
-  if (nodeIds.length !== 1) {
-    throw new Error("Expected exactly 1 commissioned node");
-  }
-
-  logger.info(`Node ID: ${nodeIds[0]}`);
-
-  const node = await controller.getNode(nodeIds[0]!);
+export async function getHueBridge(
+  controller: CommissioningController,
+  nodeId: NodeId,
+  logAll = false,
+) {
+  const node = await controller.getNode(nodeId);
   const [aggregator] = node.parts.values();
 
   if (!aggregator) {
@@ -83,16 +54,16 @@ export async function createHueController(logAll = false) {
   node.events.stateChanged.on((info) => {
     switch (info) {
       case NodeStates.Connected:
-        logger.info(`Controller is connected`);
+        logger.info(`Node is connected`);
         break;
       case NodeStates.Disconnected:
-        logger.info(`Controller is disconnected`);
+        logger.info(`Node is disconnected`);
         break;
       case NodeStates.Reconnecting:
-        logger.info(`Controller is reconnecting`);
+        logger.info(`Node is reconnecting`);
         break;
       case NodeStates.WaitingForDeviceDiscovery:
-        logger.info(`Controller is waitingForDeviceDiscovery`);
+        logger.info(`Node is waitingForDeviceDiscovery`);
         break;
     }
   });
@@ -120,8 +91,6 @@ export async function createHueController(logAll = false) {
   );
 
   return {
-    controller,
-    aggregator,
     getDimmerSwitch: (name: string) => {
       return getDimmerSwitch(logger, name, namedEndpoints[name]);
     },
@@ -134,34 +103,35 @@ export async function createHueController(logAll = false) {
   };
 }
 
-export async function commissionHueBridge(pairingCode: string) {
-  const controller = createCommissioningController();
+export async function commissionHueBridge(
+  controller: CommissioningController,
+  pairingCode: string,
+  longDiscriminator?: string, // I don't think this is needed
+) {
   const pairingCodeCodec = ManualPairingCodeCodec.decode(pairingCode);
-  const shortDiscriminator = pairingCodeCodec.shortDiscriminator;
-  const passcode = pairingCodeCodec.passcode;
+  const identifierData = longDiscriminator
+    ? { longDiscriminator }
+    : { shortDiscriminator: pairingCodeCodec.shortDiscriminator };
 
   logger.info(`Commissioning...`);
 
-  await controller.start();
-
-  await controller.commissionNode({
+  const nodeId = await controller.commissionNode({
     commissioning: {
       regulatoryLocation:
         GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
       regulatoryCountryCode: "XX",
     },
-    passcode,
+    passcode: pairingCodeCodec.passcode,
     discovery: {
-      identifierData: { shortDiscriminator },
-      // knownAddress:
-      //   ip !== undefined && port !== undefined
-      //     ? { ip, port, type: "udp" }
-      //     : undefined,
+      identifierData,
+      // knownAddress: { ip: "192.168.0.111", port: 80, type: "udp" },
       // discoveryCapabilities: {
       //   ble,
       // },
     },
   });
 
-  logger.info("Successfully commissioned");
+  logger.info(`Successfully commissioned. Node ID: ${nodeId}`);
+
+  return nodeId;
 }

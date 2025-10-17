@@ -3,8 +3,8 @@ import { type Logger } from "@matter/main";
 import { ColorControl, LevelControl, OnOff } from "@matter/main/clusters";
 import type { BitFlag, TypeFromPartialBitSchema } from "@matter/main/types";
 import type { Endpoint } from "@project-chip/matter.js/device";
-import { clamp } from "../utils.ts";
-import { ColorTemperature } from "../constants.ts";
+import { clamp } from "../../utils.ts";
+import { ColorTemperature } from "../../constants.ts";
 
 const INTESITY_COLOR_TEMPERATURE_OFFSET = 500;
 

@@ -1,7 +1,7 @@
 import { map, withLatestFrom } from "rxjs";
 import { Logger } from "@matter/main";
-import { createControlBridge } from "./control/bridge.ts";
-import { createHueController } from "./hue/controller.ts";
+import { initControlBridge } from "./control/bridge.ts";
+import { initController } from "./controller/controller.ts";
 import { locationFromEnv } from "./location.ts";
 import { createSolarEvents } from "./solar-events.ts";
 
@@ -9,8 +9,9 @@ const location = locationFromEnv();
 
 const logger = Logger.get("Smatter");
 
-const controls = await createControlBridge();
-const hue = await createHueController();
+const controls = await initControlBridge();
+const controller = await initController();
+const hue = await controller.getHueBridge();
 
 /**
  * Real Hue devices
