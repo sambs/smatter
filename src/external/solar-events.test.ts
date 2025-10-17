@@ -134,7 +134,7 @@ describe("createSolarEvents", () => {
     expect(Temporal.PlainDate.compare(event.day, now.toPlainDate())).toBe(0);
   });
 
-  it("includes past events today when includePastToday is true", async () => {
+  it("includes the most recent event today when includeMostRecent is true", async () => {
     const now = setNow("2024-06-10T08:00:00-04:00[America/New_York]");
     const sunrise = Temporal.ZonedDateTime.from(
       "2024-06-10T06:00:00-04:00[America/New_York]",
@@ -146,7 +146,7 @@ describe("createSolarEvents", () => {
     setSolarDay(now.toPlainDate(), { sunrise, sunset });
 
     const eventsPromise = firstValueFrom(
-      createSolarEvents(testLocation, { includePastToday: true }).pipe(
+      createSolarEvents(testLocation, { includeMostRecent: true }).pipe(
         take(2),
         toArray(),
       ),
@@ -161,6 +161,68 @@ describe("createSolarEvents", () => {
     expect(names).toEqual(["sunrise", "sunset"]);
     expect(Temporal.ZonedDateTime.compare(events[0]!.at, sunrise)).toBe(0);
     expect(Temporal.ZonedDateTime.compare(events[1]!.at, sunset)).toBe(0);
+  });
+
+  it("emits the most recent event when no future events remain", async () => {
+    const now = setNow("2024-06-10T21:00:00-04:00[America/New_York]");
+    const sunrise = Temporal.ZonedDateTime.from(
+      "2024-06-10T06:00:00-04:00[America/New_York]",
+    );
+    const sunset = Temporal.ZonedDateTime.from(
+      "2024-06-10T20:30:00-04:00[America/New_York]",
+    );
+
+    setSolarDay(now.toPlainDate(), { sunrise, sunset });
+
+    const eventPromise = firstValueFrom(
+      createSolarEvents(testLocation, { includeMostRecent: true }).pipe(take(1)),
+    );
+
+    await vi.runOnlyPendingTimersAsync();
+
+    const event = await eventPromise;
+
+    expect(event.name).toBe("sunset");
+    expect(Temporal.ZonedDateTime.compare(event.at, sunset)).toBe(0);
+    expect(Temporal.PlainDate.compare(event.day, now.toPlainDate())).toBe(0);
+  });
+
+  it("includes yesterday's sunset before today's sunrise when includeMostRecent is true", async () => {
+    const now = setNow("2024-06-11T01:00:00-04:00[America/New_York]");
+    const yesterday = now.toPlainDate().subtract({ days: 1 });
+
+    const ySunrise = Temporal.ZonedDateTime.from(
+      "2024-06-10T06:00:00-04:00[America/New_York]",
+    );
+    const ySunset = Temporal.ZonedDateTime.from(
+      "2024-06-10T20:30:00-04:00[America/New_York]",
+    );
+    const todaySunrise = Temporal.ZonedDateTime.from(
+      "2024-06-11T06:05:00-04:00[America/New_York]",
+    );
+
+    setSolarDay(yesterday, { sunrise: ySunrise, sunset: ySunset });
+    setSolarDay(now.toPlainDate(), { sunrise: todaySunrise, sunset: null });
+
+    const eventsPromise = firstValueFrom(
+      createSolarEvents(testLocation, { includeMostRecent: true }).pipe(
+        take(2),
+        toArray(),
+      ),
+    );
+
+    await vi.runOnlyPendingTimersAsync();
+    await vi.advanceTimersByTimeAsync(
+      toEpochMs(todaySunrise) - toEpochMs(now),
+    );
+
+    const events = await eventsPromise;
+
+    expect(events[0]!.name).toBe("sunset");
+    expect(Temporal.ZonedDateTime.compare(events[0]!.at, ySunset)).toBe(0);
+    expect(Temporal.PlainDate.compare(events[0]!.day, yesterday)).toBe(0);
+    expect(events[1]!.name).toBe("sunrise");
+    expect(Temporal.ZonedDateTime.compare(events[1]!.at, todaySunrise)).toBe(0);
   });
 
   it("applies configured offsets to emitted times", async () => {
