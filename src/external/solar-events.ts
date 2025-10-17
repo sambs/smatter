@@ -29,16 +29,23 @@ const addOffset = (
   );
 };
 
+const compareByTime = (a: SolarEvent, b: SolarEvent) =>
+  Temporal.ZonedDateTime.compare(a.at, b.at);
+
 /** Emits at Sunrise & sunset every day */
 export function createSolarEvents(
   location: Location,
-  opts: SolarEventsOptions = {},
+  options: SolarEventsOptions = {},
 ): Observable<SolarEvent> {
-  const { offsets = {}, includeMostRecent = false } = opts;
+  const { offsets = {}, includeMostRecent = false } = options;
 
   return defer(() => {
     const now = Temporal.Now.zonedDateTimeISO(location.tz);
     const today = now.toPlainDate();
+    const startOfTomorrow = today.add({ days: 1 }).toZonedDateTime({
+      timeZone: location.tz,
+      plainTime: Temporal.PlainTime.from("00:00"),
+    });
 
     const noaLocation = new GeoLocation(
       location.name ?? null,
@@ -47,84 +54,55 @@ export function createSolarEvents(
       location.elevation,
       location.tz,
     );
-    const calculator = new NOAACalculator(noaLocation, today);
 
-    const sunrise = calculator.getSunrise();
-    const sunset = calculator.getSunset();
+    const isAfterNow = (event: SolarEvent) =>
+      Temporal.ZonedDateTime.compare(event.at, now) === 1;
 
-    const events: SolarEvent[] = [
-      sunrise && {
-        name: "sunrise" as const,
-        at: addOffset(sunrise, offsets.sunrise)!,
-        day: today,
-      },
-      sunset && {
-        name: "sunset" as const,
-        at: addOffset(sunset, offsets.sunset)!,
-        day: today,
-      },
-    ].filter(Boolean) as SolarEvent[];
+    const pickMostRecent = (events: SolarEvent[]): SolarEvent | undefined =>
+      events
+        .filter((event) => !isAfterNow(event))
+        .sort((a, b) => compareByTime(b, a))[0];
 
-    const compareToNow = (event: SolarEvent) =>
-      Temporal.ZonedDateTime.compare(event.at, now);
+    const getDaysEvents = (day: Temporal.PlainDate): SolarEvent[] => {
+      const calculator = new NOAACalculator(noaLocation, day);
+      const sunrise = calculator.getSunrise();
+      const sunset = calculator.getSunset();
 
-    const futureEvents = events
-      .filter((event) => compareToNow(event) === 1)
-      .sort((a, b) => Temporal.ZonedDateTime.compare(a.at, b.at));
+      return (
+        [
+          sunrise && {
+            name: "sunrise" as const,
+            at: addOffset(sunrise, offsets.sunrise)!,
+            day,
+          },
+          sunset && {
+            name: "sunset" as const,
+            at: addOffset(sunset, offsets.sunset)!,
+            day,
+          },
+        ].filter(Boolean) as SolarEvent[]
+      ).sort(compareByTime);
+    };
 
-    let recentEvents: SolarEvent[] = [];
+    const todaysEvents = getDaysEvents(today);
+    const todaysPendingEvents = todaysEvents.filter(isAfterNow);
+    const mostRecentEvent =
+      pickMostRecent(todaysEvents) ??
+      pickMostRecent(getDaysEvents(today.subtract({ days: 1 })));
 
-    if (includeMostRecent) {
-      const pastEventsToday = events
-        .filter((event) => compareToNow(event) !== 1)
-        .sort((a, b) => Temporal.ZonedDateTime.compare(b.at, a.at));
+    const events = [
+      ...(includeMostRecent && mostRecentEvent ? [mostRecentEvent] : []),
+      ...todaysPendingEvents,
+    ].sort(compareByTime);
 
-      if (pastEventsToday.length > 0) {
-        recentEvents = pastEventsToday.slice(0, 1);
-      } else {
-        const yesterday = today.subtract({ days: 1 });
-        const yesterdayCalculator = new NOAACalculator(noaLocation, yesterday);
-        const yesterdaySunrise = yesterdayCalculator.getSunrise();
-        const yesterdaySunset = yesterdayCalculator.getSunset();
-
-        recentEvents = (
-          [
-            yesterdaySunrise && {
-              name: "sunrise" as const,
-              at: addOffset(yesterdaySunrise, offsets.sunrise)!,
-              day: yesterday,
-            },
-            yesterdaySunset && {
-              name: "sunset" as const,
-              at: addOffset(yesterdaySunset, offsets.sunset)!,
-              day: yesterday,
-            },
-          ]
-            .filter(Boolean) as SolarEvent[]
-        )
-          .filter((event) => Temporal.ZonedDateTime.compare(event.at, now) !== 1)
-          .sort((a, b) => Temporal.ZonedDateTime.compare(b.at, a.at))
-          .slice(0, 1);
-      }
-    }
-
-    const pending = recentEvents
-      .concat(futureEvents)
-      .sort((a, b) => Temporal.ZonedDateTime.compare(a.at, b.at));
-
-    const todaysEvents = pending.map((e) =>
-      timer(toDate(e.at)).pipe(map(() => e)),
+    const events$ = events.map((event) =>
+      timer(toDate(event.at)).pipe(map(() => event)),
     );
 
-    const nextMidnight = today.add({ days: 1 }).toZonedDateTime({
-      timeZone: location.tz,
-      plainTime: Temporal.PlainTime.from("00:00"),
-    });
-
-    const tomorrowsEvents = timer(toDate(nextMidnight)).pipe(
-      mergeMap(() => createSolarEvents(location, opts)),
+    const tomorrow$ = timer(toDate(startOfTomorrow)).pipe(
+      mergeMap(() => createSolarEvents(location, { offsets })),
     );
 
-    return merge(...todaysEvents, tomorrowsEvents);
+    return merge(...events$, tomorrow$);
   });
 }
