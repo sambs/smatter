@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
 import { Temporal } from "temporal-polyfill";
 import { firstValueFrom, take, toArray } from "rxjs";
 import type { Location } from "./location.ts";
@@ -85,7 +85,9 @@ function setNow(isoZoned: string): Temporal.ZonedDateTime {
   return zdt;
 }
 
-let nowSpy: ReturnType<typeof vi.spyOn>;
+let nowSpy: MockInstance<
+  (tzLike?: Temporal.TimeZoneLike | undefined) => Temporal.ZonedDateTime
+>;
 
 beforeEach(() => {
   solarDayStore.clear();
