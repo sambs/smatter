@@ -2,8 +2,8 @@ import { map, withLatestFrom } from "rxjs";
 import { Logger } from "@matter/main";
 import { initControlBridge } from "./control/bridge.ts";
 import { initController } from "./controller/controller.ts";
-import { locationFromEnv } from "./location.ts";
-import { createSolarEvents } from "./solar-events.ts";
+import { locationFromEnv } from "./external/location.ts";
+import { createSolarEvents } from "./external/solar-events.ts";
 
 const location = locationFromEnv();
 

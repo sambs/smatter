@@ -12,11 +12,11 @@ importers:
         specifier: ^0.9.2
         version: 0.9.2
       '@matter/main':
-        specifier: 0.16.0-alpha.0-20251003-dc6d5523d
-        version: 0.16.0-alpha.0-20251003-dc6d5523d
+        specifier: 0.16.0-alpha.0-20251016-b56cf5683
+        version: 0.16.0-alpha.0-20251016-b56cf5683
       '@project-chip/matter.js':
-        specifier: 0.16.0-alpha.0-20251003-dc6d5523d
-        version: 0.16.0-alpha.0-20251003-dc6d5523d
+        specifier: 0.16.0-alpha.0-20251016-b56cf5683
+        version: 0.16.0-alpha.0-20251016-b56cf5683
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
@@ -204,27 +204,27 @@ packages:
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
 
-  '@matter/general@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-C7J5YsT73r82JameudAv/ybeeKWaIbO2w2YVPDEPZmDv80x8bU9PgU4kgTuNh1xVZs/e4qqjDFesP/HBjJROJw==}
+  '@matter/general@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-xmyXx1rTAbPH0lB8zOhpUa9+sLn+T7d2cV7OqWdhHtRqd8+JdS3zoKkrlj5BB7wUOqyEvkkz+NTrwGvKaHB8vQ==}
 
-  '@matter/main@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-OvblaavK5jjXJKXEmNUlldZJMV2Zn4haqleWXXY7sGLta3r7RMhdg03yeIly/xkvLoDmym9LIugKZUG7zD9OBg==}
+  '@matter/main@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-WMRhLBeWY8lsw01pZZUSyE65upkrRK/MZ3Diw0TOFXthBAiEZI9Gbq5od7r2P9a3vC48Nr8YfTi+ujmM1ZMNIQ==}
 
-  '@matter/model@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-/wJA/l0jWFxL2A87DfJuW6rMxvrPbUG3zMTVeMjLyCSxQFDvsiolZfAzyrxsunUwAqu4lflQVIqBEgP9hQ/23g==}
+  '@matter/model@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-DeZeUoqv6MlBsXvg3mc0tMyJQGW0fBm6urSIwt2+q4T7ATihb4DXNO3ZmI8ftPIh2Ogwgx0HK7HE2APRqdeDAQ==}
 
-  '@matter/node@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-W3B4GxwZor+J6ng8xMAUarv3SKccqo3VtlKjsy+FKWgjpi+nyJB3StryvyvI+P68g3BSdVkJf7uUQGM1aaZdzg==}
+  '@matter/node@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-Ia0/kxzpTSPBS8kxUgAfPI+dl2mO5VLw11p/8zm581cYDqmi4m4XjWbxfg7IcB79aTx4uUFYs1cLhgx7iKPx/Q==}
 
-  '@matter/nodejs@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-N02wJrP6aclQiQpbbMv7OSoxUtULLnGhQ7ammwqM8UNJcHh9+QV7gXbNFDdW7F3fDqMRxZZ0fyiQzH/upr07Dw==}
+  '@matter/nodejs@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-FmH1yrNpQl9SKDZ71mqq5UnsdHBZCurgBoGKgf1+hWIbXgGRRjQ4q1kELJbqIpmS6J2eIUZ1r+4VP0cak4I34Q==}
     engines: {node: '>=20.19.0 <22.0.0 || >=22.13.0'}
 
-  '@matter/protocol@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-DYBzIIFrWBtjE9R3mnI00QJ+RDmfezJl5+vpoNgv3pG7GzXzAgWtd0FSakTjYbFGs9Apr4UJvRPUGTZURKLp3g==}
+  '@matter/protocol@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-fMyUyyqvHXWX0RqS9yQHZhrn9j6M79tHdr7fR5fLIqGIwAN++xGmkoc5sig0IJkwxaVYVDCFFbtQ7wf65UGB9w==}
 
-  '@matter/types@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-IHy/cn7Exc4mU21E5mjqtxkJyG7ypo61vlks66wmrPrOLH4HL4eJcOGPJy+NII4yo2ejbSfKbYvZ+jUn0cf0dg==}
+  '@matter/types@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-sQqLcl4iQd8mFhMErknMsjezm3e5xwT84KyNyyIupCpUNYaqtnWeXt5kHFw8olXxSUw5mZAJ/9gH7zkyJ4a6fw==}
 
   '@noble/curves@2.0.1':
     resolution: {integrity: sha512-vs1Az2OOTBiP4q0pwjW5aF0xp9n4MxVrmkFBxc6EKZc6ddYx5gaZiAsZoq0uRRXWbi3AT/sBqn05eRPtn1JCPw==}
@@ -234,8 +234,8 @@ packages:
     resolution: {integrity: sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw==}
     engines: {node: '>= 20.19.0'}
 
-  '@project-chip/matter.js@0.16.0-alpha.0-20251003-dc6d5523d':
-    resolution: {integrity: sha512-n6Sznu+dGGEBO0Mdp5V2Bf5GTimRQVFxbLh3wOOYFM5lU5kj2T44lwoULleq6Js69exuyPZjX1ThTxCPn+JkZA==}
+  '@project-chip/matter.js@0.16.0-alpha.0-20251016-b56cf5683':
+    resolution: {integrity: sha512-rf5Inxf/vQQIIrSpCMd0wa6FHqYGmZd2ZuAjehHJNk9O7MfvYGkxjSOFfReWHzEz4gqKYCsu7K3U6S1JngdyXQ==}
 
   '@rollup/rollup-android-arm-eabi@4.52.4':
     resolution: {integrity: sha512-BTm2qKNnWIQ5auf4deoetINJm2JzvihvGb9R6K/ETwKLql/Bb3Eg2H1FBp1gUb4YGbydMA3jcmQTR73q7J+GAA==}
@@ -716,49 +716,49 @@ snapshots:
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
-  '@matter/general@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@matter/general@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
       '@noble/curves': 2.0.1
 
-  '@matter/main@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@matter/main@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/node': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/general': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/model': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/node': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/protocol': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/types': 0.16.0-alpha.0-20251016-b56cf5683
     optionalDependencies:
-      '@matter/nodejs': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/nodejs': 0.16.0-alpha.0-20251016-b56cf5683
 
-  '@matter/model@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@matter/model@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/general': 0.16.0-alpha.0-20251016-b56cf5683
 
-  '@matter/node@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@matter/node@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/general': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/model': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/protocol': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/types': 0.16.0-alpha.0-20251016-b56cf5683
 
-  '@matter/nodejs@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@matter/nodejs@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/node': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/general': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/node': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/protocol': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/types': 0.16.0-alpha.0-20251016-b56cf5683
     optional: true
 
-  '@matter/protocol@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@matter/protocol@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/general': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/model': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/types': 0.16.0-alpha.0-20251016-b56cf5683
 
-  '@matter/types@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@matter/types@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/general': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/model': 0.16.0-alpha.0-20251016-b56cf5683
 
   '@noble/curves@2.0.1':
     dependencies:
@@ -766,13 +766,13 @@ snapshots:
 
   '@noble/hashes@2.0.1': {}
 
-  '@project-chip/matter.js@0.16.0-alpha.0-20251003-dc6d5523d':
+  '@project-chip/matter.js@0.16.0-alpha.0-20251016-b56cf5683':
     dependencies:
-      '@matter/general': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/model': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/node': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/protocol': 0.16.0-alpha.0-20251003-dc6d5523d
-      '@matter/types': 0.16.0-alpha.0-20251003-dc6d5523d
+      '@matter/general': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/model': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/node': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/protocol': 0.16.0-alpha.0-20251016-b56cf5683
+      '@matter/types': 0.16.0-alpha.0-20251016-b56cf5683
 
   '@rollup/rollup-android-arm-eabi@4.52.4':
     optional: true

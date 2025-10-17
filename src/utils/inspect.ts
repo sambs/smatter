@@ -3,32 +3,20 @@ import { DescriptorClient } from "@matter/main/behaviors/descriptor";
 import { BasicInformationClient } from "@matter/main/behaviors/basic-information";
 import { UserLabelClient } from "@matter/main/behaviors/user-label";
 import { BridgedDeviceBasicInformationClient } from "@matter/main/behaviors/bridged-device-basic-information";
-import type { DecodedEventData } from "@matter/main/protocol";
 
 export function inspectEndpoint(endpoint: Endpoint) {
   console.log("Inspecting endpoint", endpoint.id);
+
   try {
     console.log("Descriptor", endpoint.stateOf(DescriptorClient));
-  } catch (error) {
-    console.error(error?.message ?? error);
-  }
-  try {
     console.log(
       "Bridged Device Basic Information",
       endpoint.stateOf(BridgedDeviceBasicInformationClient),
     );
-  } catch (error) {
-    console.error(error?.message ?? error);
-  }
-  try {
     console.log("Basic Information", endpoint.stateOf(BasicInformationClient));
-  } catch (error) {
-    console.error(error?.message ?? error);
-  }
-  try {
     console.log("User Label", endpoint.stateOf(UserLabelClient));
   } catch (error) {
-    console.error(error?.message ?? error);
+    console.error(error instanceof Error ? error.message : error);
   }
 
   endpoint.parts.forEach((endpoint) => {
@@ -36,12 +24,3 @@ export function inspectEndpoint(endpoint: Endpoint) {
     return true;
   });
 }
-
-export function getEventDelay(event: DecodedEventData<any>) {
-  return (
-    event.epochTimestamp && BigInt(Date.now()) - BigInt(event.epochTimestamp)
-  );
-}
-
-export const clamp = (value: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, value));

@@ -96,9 +96,9 @@ beforeEach(() => {
       if (!timeZoneLike) {
         throw new Error("timeZone is required in mock");
       }
-      return Temporal.Instant.fromEpochMilliseconds(Date.now()).toZonedDateTimeISO(
-        timeZoneLike,
-      );
+      return Temporal.Instant.fromEpochMilliseconds(
+        Date.now(),
+      ).toZonedDateTimeISO(timeZoneLike);
     });
 });
 
@@ -157,8 +157,8 @@ describe("createSolarEvents", () => {
 
     const names = events.map((event: SolarEvent) => event.name);
     expect(names).toEqual(["sunrise", "sunset"]);
-    expect(Temporal.ZonedDateTime.compare(events[0].at, sunrise)).toBe(0);
-    expect(Temporal.ZonedDateTime.compare(events[1].at, sunset)).toBe(0);
+    expect(Temporal.ZonedDateTime.compare(events[0]!.at, sunrise)).toBe(0);
+    expect(Temporal.ZonedDateTime.compare(events[1]!.at, sunset)).toBe(0);
   });
 
   it("applies configured offsets to emitted times", async () => {
@@ -208,7 +208,9 @@ describe("createSolarEvents", () => {
       createSolarEvents(testLocation).pipe(take(1)),
     );
 
-    await vi.advanceTimersByTimeAsync(toEpochMs(tomorrowSunrise) - toEpochMs(now));
+    await vi.advanceTimersByTimeAsync(
+      toEpochMs(tomorrowSunrise) - toEpochMs(now),
+    );
 
     const event = await eventPromise;
 
