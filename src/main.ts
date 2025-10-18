@@ -1,9 +1,13 @@
-import { map, withLatestFrom } from "rxjs";
+import { filter, map, mapTo, withLatestFrom } from "rxjs";
 import { Logger } from "@matter/main";
 import { initControlBridge } from "./control/bridge.ts";
 import { initController } from "./controller/controller.ts";
 import { locationFromEnv } from "./external/location.ts";
-import { createSolarEvents } from "./external/solar-events.ts";
+import {
+  createSolarEvents,
+  isSunrise,
+  isSunset,
+} from "./external/solar-events.ts";
 
 const location = locationFromEnv();
 
@@ -21,6 +25,7 @@ const bedsideLight = hue.getLight("Bedside Light");
 const goldStandard = hue.getLight("Gold Standard");
 const deskLight = hue.getLight("Desk Light");
 const deskSwitch = hue.getDimmerSwitch("Desk Switch");
+const landingPendant = hue.getLight("Landing Pendant");
 const landingMotionSensor = hue.getMotionSensor("Landing Motion Sensor");
 
 /**
@@ -37,19 +42,25 @@ const lightTemp = await controls.createSlider(
  * External inputs
  */
 
+const solarEventOffsets = {
+  sunrise: { minutes: -10 },
+  sunset: { minutes: -60 },
+};
 const solarEvents = createSolarEvents(location, {
-  offsets: {
-    sunrise: { minutes: -10 },
-    sunset: { minutes: 5 },
-  },
+  includeMostRecent: false,
+  offsets: solarEventOffsets,
 });
+const isNight = createSolarEvents(location, {
+  includeMostRecent: true,
+  offsets: solarEventOffsets,
+}).pipe(map(isSunset));
 
 /**
  * Log things
  */
 
 solarEvents.subscribe((e) => {
-  logger.info(`SolarEvent: ${e.name} at ${e.at.toString()}`);
+  logger.info(`Solar event: ${e.name} at ${e.at.toString()}`);
 });
 isBedtime.subscribe((value) => {
   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
@@ -61,17 +72,16 @@ deskLight.isOn.subscribe((v) => logger.info(`Desk Light isOn: ${v}`));
  * Do things
  */
 
-isBedtime.pipe(map((isBedtime) => (isBedtime ? 70 : 200))).subscribe(lightTemp);
+// Turn off bedtime mode when the sun rises
+solarEvents
+  .pipe(
+    filter(isSunrise),
+    map(() => false),
+  )
+  .subscribe(isBedtime);
 
-// deskSwitch.topButton.initialPress
-//   .pipe(
-//     withLatestFrom(isBedtime),
-//     map(([_event, isBedtime]) => ({
-//       level: isBedtime ? 75 : 200,
-//       transitionTime: 5,
-//     })),
-//   )
-//   .subscribe(deskLight.moveToLevelWithOnOff);
+// Adjust light temperature depending on whether it's bedtime
+isBedtime.pipe(map((isBedtime) => (isBedtime ? 70 : 150))).subscribe(lightTemp);
 
 deskSwitch.topButton.initialPress.subscribe(deskLight.turnOn);
 deskSwitch.bottomButton.initialPress.subscribe(deskLight.turnOff);

@@ -41,6 +41,12 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
         });
       }
     }),
+    // Todo: combine with isOn observable?
+    setOn: {
+      next: (isOn: boolean) => {
+        isOn ? onOffClient?.on() : onOffClient?.off();
+      },
+    },
     turnOn: {
       next: () => {
         onOffClient?.on();
