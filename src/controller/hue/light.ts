@@ -19,6 +19,21 @@ type MoveToIntensityRequest = {
   }>;
 };
 
+type OnWithTimedOffRequest = {
+  /**
+   * How long the light should stay on in 1/10s
+   */
+  onTime: number;
+  /**
+   * Block a retrigger after turning off
+   */
+  offWaitTime?: number;
+  /**
+   * Only accept the command when the light is on
+   */
+  onlyWhenOn?: boolean;
+};
+
 export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
   if (!endpoint) {
     logger.warn(`Light "${name}" not found"`);
@@ -41,20 +56,28 @@ export function getLight(logger: Logger, name: string, endpoint?: Endpoint) {
         });
       }
     }),
-    // Todo: combine with isOn observable?
-    setOn: {
+    set: {
       next: (isOn: boolean) => {
         isOn ? onOffClient?.on() : onOffClient?.off();
       },
     },
-    turnOn: {
+    on: {
       next: () => {
         onOffClient?.on();
       },
     },
-    turnOff: {
+    off: {
       next: () => {
         onOffClient?.off();
+      },
+    },
+    onWithTimedOff: {
+      next: ({ onTime, offWaitTime, onlyWhenOn }: OnWithTimedOffRequest) => {
+        onOffClient?.onWithTimedOff({
+          onTime,
+          offWaitTime: offWaitTime ?? 0,
+          onOffControl: { acceptOnlyWhenOn: onlyWhenOn },
+        });
       },
     },
     level: new Observable<number>((subscriber) => {

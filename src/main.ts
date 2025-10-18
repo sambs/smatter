@@ -1,4 +1,13 @@
-import { filter, map, mapTo, withLatestFrom } from "rxjs";
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  of,
+  pipe,
+  switchMap,
+  timer,
+  withLatestFrom,
+} from "rxjs";
 import { Logger } from "@matter/main";
 import { initControlBridge } from "./control/bridge.ts";
 import { initController } from "./controller/controller.ts";
@@ -56,36 +65,73 @@ const isNight = createSolarEvents(location, {
 }).pipe(map(isSunset));
 
 /**
+ * Operators
+ */
+
+const ifBedtime = pipe(
+  withLatestFrom(isBedtime),
+  filter(([, isBedtime]) => isBedtime),
+  map(([x]) => x),
+);
+const ifNight = pipe(
+  withLatestFrom(isNight),
+  filter(([, isNight]) => isNight),
+  map(([x]) => x),
+);
+const delayOff = (delay: number) =>
+  pipe(
+    switchMap((v) => (v ? of(true) : timer(delay * 1000).pipe(mapTo(false)))),
+    distinctUntilChanged(),
+  );
+const mapTo = <T>(x: T) => map(() => x);
+const ifTrue = filter((x) => !!x);
+const ifFalse = filter((x) => !x);
+
+/**
  * Log things
  */
 
 solarEvents.subscribe((e) => {
   logger.info(`Solar event: ${e.name} at ${e.at.toString()}`);
 });
+
+isNight.subscribe((isNight) => {
+  logger.info(isNight ? "It's night time" : "It's day time");
+});
+
 isBedtime.subscribe((value) => {
   logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
 });
-lightTemp.subscribe((v) => logger.info(`Light temp: ${v}`));
-deskLight.isOn.subscribe((v) => logger.info(`Desk Light isOn: ${v}`));
+
+lightTemp.subscribe((value) => {
+  logger.info(`Light temp: ${value}`);
+});
+
+landingMotionSensor.isOccupied.subscribe((isOccupied) => {
+  logger.info(`Landing occupied: ${isOccupied}`);
+});
+
+landingPendant.isOn.subscribe((v) => {
+  logger.info(`Landing Pendant isOn: ${v}`);
+});
 
 /**
  * Do things
  */
 
 // Turn off bedtime mode when the sun rises
-solarEvents
-  .pipe(
-    filter(isSunrise),
-    map(() => false),
-  )
-  .subscribe(isBedtime);
+solarEvents.pipe(filter(isSunrise), mapTo(false)).subscribe(isBedtime);
 
 // Adjust light temperature depending on whether it's bedtime
-isBedtime.pipe(map((isBedtime) => (isBedtime ? 70 : 150))).subscribe(lightTemp);
+isBedtime.pipe(map((isBedtime) => (isBedtime ? 50 : 150))).subscribe(lightTemp);
 
-deskSwitch.topButton.initialPress.subscribe(deskLight.turnOn);
-deskSwitch.bottomButton.initialPress.subscribe(deskLight.turnOff);
+deskSwitch.topButton.initialPress.subscribe(deskLight.on);
+deskSwitch.bottomButton.initialPress.subscribe(deskLight.off);
 
 lightTemp
   .pipe(map((level) => ({ intensity: level })))
-  .subscribe(deskLight.moveToIntensity);
+  .subscribe(landingPendant.moveToIntensity);
+
+landingMotionSensor.isOccupied
+  .pipe(ifNight, delayOff(180))
+  .subscribe(landingPendant.set);
