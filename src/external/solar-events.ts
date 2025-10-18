@@ -108,4 +108,4 @@ export function createSolarEvents(
 }
 
 export const isSunrise = (event: SolarEvent) => event.name === "sunrise";
-export const isSunset = (event: SolarEvent) => event.name === "sunrise";
+export const isSunset = (event: SolarEvent) => event.name === "sunset";
