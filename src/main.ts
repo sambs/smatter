@@ -4,6 +4,7 @@ import {
   map,
   of,
   pipe,
+  skip,
   switchMap,
   timer,
   withLatestFrom,
@@ -86,6 +87,7 @@ const delayOff = (delay: number) =>
 const mapTo = <T>(x: T) => map(() => x);
 const ifTrue = filter((x) => !!x);
 const ifFalse = filter((x) => !x);
+const omitInitial = pipe(distinctUntilChanged(), skip(1));
 
 /**
  * Log things
@@ -100,7 +102,11 @@ isNight.subscribe((isNight) => {
 });
 
 isBedtime.subscribe((value) => {
-  logger.info(value ? "Entering bedtime mode" : "Exiting bedtime mode");
+  logger.info(value ? "It's bedtime" : "It's not bedtime");
+});
+
+isBedtime.pipe(omitInitial).subscribe((value) => {
+  logger.info(value ? "Bedtime has begun" : "Bedtime is over");
 });
 
 lightTemp.subscribe((value) => {
