@@ -2,6 +2,7 @@ import { Endpoint, ServerNode, VendorId } from "@matter/main";
 import { AggregatorEndpoint } from "@matter/main/endpoints/aggregator";
 import { Switch } from "./switch.ts";
 import { Slider } from "./slider.ts";
+import { RadioButtons, type RadioButtonConfig } from "./radio-buttons.ts";
 
 const BRIDGE_ID = "control-bridge";
 const BRIDGE_NAME = "Control Bridge";
@@ -75,6 +76,20 @@ export async function initControlBridge() {
     async deleteSlider(id: string, name: string): Promise<void> {
       const slider = await this.createSlider(id, name);
       await slider.endpoint.delete();
+    },
+    async createRadioButtons<S extends string>(
+      idPrefix: string,
+      buttonConfig: RadioButtonConfig<S>,
+    ) {
+      const endpoints = RadioButtons.createEndpoints(idPrefix, buttonConfig);
+
+      await Promise.all(
+        Object.values(endpoints as Record<string, Endpoint>).map((endpoint) =>
+          aggregator.add(endpoint),
+        ),
+      );
+
+      return new RadioButtons(endpoints);
     },
   };
 }

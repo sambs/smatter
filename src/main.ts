@@ -47,6 +47,10 @@ const lightTemp = await controls.createSlider(
   "light-temp-offset",
   "Light Temperature",
 );
+const livingScene = await controls.createRadioButtons("living-scene", {
+  full: "Full",
+  me: "Me",
+});
 
 /**
  * External inputs
@@ -111,6 +115,10 @@ isBedtime.pipe(omitInitial).subscribe((value) => {
 
 lightTemp.subscribe((value) => {
   logger.info(`Light temp: ${value}`);
+});
+
+livingScene.subscribe((value) => {
+  logger.info(`Living scene: ${value}`);
 });
 
 landingMotionSensor.isOccupied.subscribe((isOccupied) => {
