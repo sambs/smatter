@@ -69,7 +69,7 @@ export async function getHueBridge(
   });
 
   node.events.structureChanged.on(() => {
-    console.log(`Node ${node.nodeId} structure changed`);
+    logger.info('Node structure changed');
   });
 
   const namedEndpoints: Record<string, Endpoint> = {};
